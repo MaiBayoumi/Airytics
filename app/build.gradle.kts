@@ -26,6 +26,10 @@ android {
             )
         }
     }
+    buildFeatures{
+        viewBinding = true
+        dataBinding = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -42,7 +46,17 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Lottie
+    implementation ("com.airbnb.android:lottie:3.4.0")
+
+    //navigation
+
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.0-beta01")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.7.0-beta01")
 }

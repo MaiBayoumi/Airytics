@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">Airytics</string>
+    <string name="home_title">Home</string>
+    <string name="favourite_title">Favourite</string>
+    <string name="alert_title">Alert</string>
+    <string name="setting_title">Setting</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location">Location</string>
+    <string name="day_details">17 SEP 24</string>
+    <string name="_28">28°</string>
+    <string name="sunny_day">Sunny</string>
+    <string name="sunrise">06:00 AM</string>
+    <string name="sunset">07:00 PM</string>
+    <string name="percentage">0%</string>
+    <string name="cloud">cloud</string>
+    <string name="_77">60%</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="windms">6 m/sec</string>
+    <string name="pressure">Pressure</string>
+    <string name="_1021_hpa">1015 hpa</string>
+    <string name="today">Today</string>
+    <string name="hour">4 PM</string>
+    <string name="day">Day</string>
+    <string name="_23_13_c">23/13°C</string>
 </resources>
