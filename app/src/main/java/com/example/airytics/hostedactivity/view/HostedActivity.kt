@@ -1,12 +1,15 @@
-package com.example.airytics
+package com.example.airytics.hostedactivity.view
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
+import com.example.airytics.R
 import com.example.airytics.databinding.ActivityHostedBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HostedActivity : AppCompatActivity() {
 
@@ -17,5 +20,8 @@ class HostedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHostedBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+        NavigationUI.setupWithNavController(binding.bottomNavigation, navController)
     }
 }

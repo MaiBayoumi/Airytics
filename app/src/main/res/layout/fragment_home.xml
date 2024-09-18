@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue"
-    tools:context=".HomeFragment">
+    tools:context=".homefrag.HomeFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,18 +35,19 @@
             android:visibility="gone"
             android:clickable="true"/>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/loading_lottie"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/loading"
-            />
+<!--        <com.airbnb.lottie.LottieAnimationView-->
+<!--            android:id="@+id/loading_lottie"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:lottie_autoPlay="true"-->
+<!--            app:lottie_loop="true"-->
+<!--            app:lottie_rawRes="@raw/splash1"-->
+<!--            android:visibility="gone"-->
+<!--            />-->
 
         <TextView
             android:id="@+id/tv_location_name"
@@ -328,12 +329,11 @@
             android:id="@+id/rv_days"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBaseline_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_hours"
             tools:listitem="@layout/item_days"/>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
