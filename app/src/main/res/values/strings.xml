@@ -24,4 +24,5 @@
     <string name="hour">4 PM</string>
     <string name="day">Day</string>
     <string name="_23_13_c">23/13°C</string>
+    <string name="favplaces">Your Favourite Places</string>
 </resources>

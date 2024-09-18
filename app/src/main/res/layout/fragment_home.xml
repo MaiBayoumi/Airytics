@@ -80,8 +80,8 @@
             android:id="@+id/iv_weather"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="88dp"
+            android:layout_marginTop="4dp"
             android:elevation="9dp"
             android:scaleType="fitCenter"
             android:src="@drawable/cast"
@@ -99,6 +99,8 @@
             android:textColor="@color/white"
             android:textSize="40sp"
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
+            app:layout_constraintHorizontal_bias="0.807"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_weather" />
 
         <TextView
@@ -111,6 +113,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
+            app:layout_constraintStart_toStartOf="@+id/tv_current_degree"
             app:layout_constraintTop_toBottomOf="@id/tv_current_degree" />
 
         <ImageView
@@ -129,12 +132,13 @@
             android:id="@+id/tv_sunRise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/sunRise"
-            app:layout_constraintBottom_toBottomOf="@id/sunRise"
-            android:layout_marginStart="5dp"
             android:text="@string/sunrise"
             android:textColor="@color/white"
-            />
+            app:layout_constraintBottom_toBottomOf="@id/sunRise"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/sunRise"
+            app:layout_constraintTop_toTopOf="@+id/sunRise" />
 
         <ImageView
             android:id="@+id/sunSet"
@@ -153,11 +157,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sunset"
-            app:layout_constraintStart_toEndOf="@id/sunSet"
-            app:layout_constraintBottom_toBottomOf="@id/sunSet"
-            android:layout_marginStart="5dp"
             android:textColor="@color/white"
-            />
+            app:layout_constraintBottom_toBottomOf="@id/sunSet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/sunSet"
+            app:layout_constraintTop_toTopOf="@+id/sunSet" />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_details"
             android:layout_width="match_parent"
@@ -181,7 +187,7 @@
                     android:id="@+id/iv_cloud"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginStart="8dp"
                     android:src="@drawable/cloud"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -192,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/percentage"
                     android:textColor="@color/blue"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/lato_regular"
                     app:layout_constraintEnd_toEndOf="@id/iv_cloud"
@@ -205,7 +211,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/cloud"
                     android:textColor="@color/blue"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:fontFamily="@font/lato_regular"
                     app:layout_constraintEnd_toEndOf="@id/tv_dynamic_cloud"
                     app:layout_constraintStart_toStartOf="@id/tv_dynamic_cloud"
@@ -226,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/_77"
                     android:textColor="@color/blue"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/lato_regular"
                     app:layout_constraintEnd_toEndOf="@id/iv_humidity"
@@ -239,7 +245,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/humidity"
                     android:textColor="@color/blue"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:fontFamily="@font/lato_regular"
                     app:layout_constraintEnd_toEndOf="@id/tv_dynamic_humidity"
                     app:layout_constraintStart_toStartOf="@id/tv_dynamic_humidity"
@@ -259,7 +265,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/windms"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@color/blue"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@id/iv_wind"
@@ -272,7 +278,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/wind"
                     android:textColor="@color/blue"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:fontFamily="@font/lato_regular"
                     app:layout_constraintEnd_toEndOf="@id/tv_dynamic_wind"
                     app:layout_constraintStart_toStartOf="@id/tv_dynamic_wind"
@@ -284,7 +290,11 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="40dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="16dp"
                     android:src="@drawable/pressure"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/iv_wind"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -292,25 +302,25 @@
                     android:id="@+id/tv_dynamic_pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato_regular"
                     android:text="@string/_1021_hpa"
                     android:textColor="@color/blue"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/lato_regular"
-                    app:layout_constraintEnd_toEndOf="@id/iv_pressure"
-                    app:layout_constraintStart_toStartOf="@id/iv_pressure"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_pressure"
+                    app:layout_constraintStart_toStartOf="@+id/iv_pressure"
                     app:layout_constraintTop_toBottomOf="@id/iv_pressure" />
 
                 <TextView
                     android:id="@+id/tv_pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato_regular"
                     android:text="@string/pressure"
                     android:textColor="@color/blue"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/lato_regular"
-                    app:layout_constraintEnd_toEndOf="@id/iv_pressure"
-                    app:layout_constraintStart_toStartOf="@id/iv_pressure"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_dynamic_pressure"
+                    app:layout_constraintStart_toStartOf="@+id/tv_dynamic_pressure"
                     app:layout_constraintTop_toBottomOf="@id/tv_dynamic_pressure" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
