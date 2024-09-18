@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="15dp"
+        android:fontFamily="@font/lato_regular"
         android:text="@string/location"
         android:textColor="@color/blue"
         android:textSize="25sp" />

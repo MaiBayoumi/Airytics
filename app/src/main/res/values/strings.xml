@@ -25,4 +25,24 @@
     <string name="day">Day</string>
     <string name="_23_13_c">23/13°C</string>
     <string name="favplaces">Your Favourite Places</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="meter_sec">m/sec</string>
+    <string name="mile_hour">mile/hr</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="notifications">Notifications</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="temperature">Temperature</string>
+    <string name="celsius">Celsius</string>
+    <string name="kelvin">Kelvin</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="clock">04:35 PM</string>
+    <string name="notification">Notification</string>
+    <string name="overlay_permission_is_required_for_alert">Overlay Permission Is Required</string>
+    <string name="notification_permission">Notification Permission Is Required</string>
+    <string name="add_alert">Add Alert</string>
 </resources>
