@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.airytics.HomeFragment"
+        android:name="com.example.airytics.homefrag.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
@@ -20,4 +20,9 @@
         android:name="com.example.airytics.setting.settingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/alertFragment"
+        android:name="com.example.airytics.alert.alertFragment"
+        android:label="fragment_alert"
+        tools:layout="@layout/fragment_alert" />
 </navigation>

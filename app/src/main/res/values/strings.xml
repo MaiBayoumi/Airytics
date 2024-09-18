@@ -45,4 +45,8 @@
     <string name="overlay_permission_is_required_for_alert">Overlay Permission Is Required</string>
     <string name="notification_permission">Notification Permission Is Required</string>
     <string name="add_alert">Add Alert</string>
+    <string name="tomo">Tomorrow</string>
+    <string name="k">K</string>
+    <string name="f">F</string>
+    <string name="c">c</string>
 </resources>
