@@ -14,7 +14,11 @@
         android:id="@+id/favouriteFragment"
         android:name="com.example.airytics.favourite.FavouriteFragment"
         android:label="fragment_favourite"
-        tools:layout="@layout/fragment_favourite" />
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_favouriteFragment_to_detailsFragment2"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.example.airytics.setting.settingFragment"
@@ -25,4 +29,9 @@
         android:name="com.example.airytics.alert.alertFragment"
         android:label="fragment_alert"
         tools:layout="@layout/fragment_alert" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.airytics.details.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
 </navigation>

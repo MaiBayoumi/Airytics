@@ -5,12 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue"
-    tools:context=".homefrag.HomeFragment">
+    tools:context=".details.DetailsFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loading_lottie_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/splash1"
+            />
 
         <ProgressBar
             android:id="@+id/pr_progress"
@@ -34,20 +47,6 @@
             android:src="@drawable/near_me_ic"
             android:visibility="gone"
             android:clickable="true"/>
-
-<!--        <com.airbnb.lottie.LottieAnimationView-->
-<!--            android:id="@+id/loading_lottie"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:lottie_autoPlay="true"-->
-<!--            app:lottie_loop="true"-->
-<!--            app:lottie_rawRes="@raw/splash1"-->
-<!--            android:visibility="gone"-->
-<!--            />-->
 
         <TextView
             android:id="@+id/tv_location_name"
@@ -173,7 +172,6 @@
             app:cardElevation="10dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_weather"
             app:strokeWidth="0dp">
@@ -347,3 +345,4 @@
             tools:listitem="@layout/item_days"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+
