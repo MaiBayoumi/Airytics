@@ -1,11 +1,9 @@
-package com.example.airytics.utils
+package com.example.airytics.utilities
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.location.Geocoder
 import android.widget.ImageView
 import com.example.airytics.R
 import java.text.SimpleDateFormat

@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.airytics.R
 import com.example.airytics.databinding.ItemDaysBinding
 import com.example.airytics.model.Daily
-import com.example.airytics.network.SettingSharedPref
-import com.example.airytics.utils.Constants
-import com.example.airytics.utils.Functions
+import com.example.airytics.sharedpref.SettingSharedPref
+import com.example.airytics.utilities.Constants
+import com.example.airytics.utilities.Functions
 
 class DailyRecyclerAdapter :
     ListAdapter<Daily, DailyRecyclerAdapter.DailyViewHolder>(RecyclerDiffUtilDaily()) {

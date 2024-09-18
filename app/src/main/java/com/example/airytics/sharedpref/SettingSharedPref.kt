@@ -1,9 +1,9 @@
-package com.example.airytics.network
+package com.example.airytics.sharedpref
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
-import com.example.airytics.utils.Constants
+import com.example.airytics.utilities.Constants
 
 class SettingSharedPref private constructor(context: Context) : SettingSPInterface {
     private val sharedPreferences: SharedPreferences by lazy {

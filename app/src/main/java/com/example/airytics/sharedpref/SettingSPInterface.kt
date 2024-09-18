@@ -1,4 +1,4 @@
-package com.example.airytics.network
+package com.example.airytics.sharedpref
 
 interface SettingSPInterface {
     fun writeStringToSettingSP(key: String, value: String)
