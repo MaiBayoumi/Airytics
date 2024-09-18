@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Airytics"
         tools:targetApi="31">
         <activity
-            android:name=".HostedActivity"
+            android:name=".hostedactivity.view.HostedActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
