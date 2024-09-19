@@ -49,4 +49,6 @@
     <string name="k">K</string>
     <string name="f">F</string>
     <string name="c">c</string>
+    <string name="ok">OK</string>
+    <string name="save_location">Save</string>
 </resources>

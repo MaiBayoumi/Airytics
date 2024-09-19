@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_favouriteFragment_to_detailsFragment2"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_favouriteFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -34,4 +37,9 @@
         android:name="com.example.airytics.details.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.airytics.map.mapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
 </navigation>
