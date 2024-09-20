@@ -16,7 +16,7 @@
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite" >
         <action
-            android:id="@+id/action_favouriteFragment_to_detailsFragment2"
+            android:id="@+id/action_favouriteFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
         <action
             android:id="@+id/action_favouriteFragment_to_mapFragment"
