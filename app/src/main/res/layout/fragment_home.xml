@@ -57,15 +57,15 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
             android:elevation="10dp"
+            android:maxWidth="250dp"
+            android:maxHeight="100dp"
             android:text="@string/location"
             android:textColor="@color/white"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:maxWidth="250dp"
-            android:maxHeight="100dp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_date"
@@ -84,7 +84,7 @@
             android:id="@+id/iv_weather"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginStart="88dp"
+            android:layout_marginStart="100dp"
             android:layout_marginTop="4dp"
             android:elevation="9dp"
             android:scaleType="fitCenter"
@@ -98,14 +98,15 @@
             android:id="@+id/tv_current_degree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="20dp"
             android:elevation="10dp"
             android:text="@string/_28"
             android:textColor="@color/white"
             android:textSize="40sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_weather_status"
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
-            app:layout_constraintHorizontal_bias="0.807"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_weather"
             android:visibility="gone"
@@ -115,13 +116,14 @@
             android:id="@+id/tv_weather_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="36dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/sunny_day"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
-            app:layout_constraintStart_toStartOf="@+id/tv_current_degree"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_current_degree"
             android:visibility="gone"
             />
@@ -130,7 +132,7 @@
             android:id="@+id/sunRise"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:elevation="9dp"
             android:scaleType="fitCenter"
@@ -138,6 +140,7 @@
             app:layout_constraintStart_toEndOf="@id/iv_weather"
             app:layout_constraintTop_toTopOf="@id/iv_weather"
             android:visibility="gone"
+
             />
 
         <TextView
@@ -152,13 +155,14 @@
             app:layout_constraintStart_toEndOf="@id/sunRise"
             app:layout_constraintTop_toTopOf="@+id/sunRise"
             android:visibility="gone"
+
             />
 
         <ImageView
             android:id="@+id/sunSet"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginBottom="40dp"
             android:elevation="9dp"
             android:scaleType="fitCenter"
@@ -166,6 +170,8 @@
             app:layout_constraintBottom_toBottomOf="@id/iv_weather"
             app:layout_constraintStart_toEndOf="@id/iv_weather"
             android:visibility="gone"
+
+
             />
 
         <TextView
@@ -180,6 +186,7 @@
             app:layout_constraintStart_toEndOf="@id/sunSet"
             app:layout_constraintTop_toTopOf="@+id/sunSet"
             android:visibility="gone"
+
             />
 
         <com.google.android.material.card.MaterialCardView

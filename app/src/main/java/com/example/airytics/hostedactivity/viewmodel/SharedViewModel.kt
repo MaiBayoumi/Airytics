@@ -60,31 +60,28 @@ class SharedViewModel(
                 }
             }
         } else {
-            getCashedData()
+            getCachedData()
         }
     }
 
     fun getWeatherData(coordinate: Coordinate, language: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                repo.getWeatherResponse(coordinate, language).catch {
-                    _weatherResponseMutableStateFlow.value = ApiState.Failure(it.message!!)
-                }.collect {
-//                    weatherResponse ->
-//                    if (weatherResponse.isSuccessful) {
-//                        _weatherResponseMutableStateFlow.value =
-//                            ApiState.Success(weatherResponse.body()!!)
-//                    } else {
-//                        _weatherResponseMutableStateFlow.value =
-//                            ApiState.Failure(weatherResponse.message())
-//                    }
-                }
-            }catch (_:Exception){
-                repo.getCashedData()
-            }
+                repo.getWeatherResponse(coordinate, language)
+                    .catch { exception ->
+                        // Handle the failure case
+                        _weatherResponseMutableStateFlow.value = ApiState.Failure(exception.message ?: "Unknown error occurred")
+                    }
+                    .collectLatest { weatherResponse ->
+                        if (weatherResponse.isSuccessful) {
+                            // If the response is successful, update the state with the result
+                            _weatherResponseMutableStateFlow.value = ApiState.Success(weatherResponse.body()!!)
+                        } else {
+                            // Handle API error response
+                            _weatherResponseMutableStateFlow.value = ApiState.Failure(weatherResponse.message())
+                        }
+                    }
         }
     }
-
 
     fun insertPlaceToFav(place: Place) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -92,20 +89,19 @@ class SharedViewModel(
         }
     }
 
-    fun insertCashedData(weatherResponse: WeatherResponse) {
+    fun insertCachedData(weatherResponse: WeatherResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.insertCashedData(weatherResponse)
         }
     }
 
-    private fun getCashedData() {
+    private fun getCachedData() {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getCashedData()?.collect {
+            repo.getCashedData()?.collect { cachedWeather ->
                 try {
-                    _weatherResponseMutableStateFlow.value = ApiState.Success(it)
-                } catch (_: Exception) {
-                    _weatherResponseMutableStateFlow.value =
-                        ApiState.Failure("No Internet Connection")
+                    _weatherResponseMutableStateFlow.value = ApiState.Success(cachedWeather)
+                } catch (exception: Exception) {
+                    _weatherResponseMutableStateFlow.value = ApiState.Failure("Failed to load cached data")
                 }
             }
         }
@@ -130,5 +126,4 @@ class SharedViewModel(
     fun readFloatFromSettingSP(key: String): Float {
         return repo.readFloatFromSettingSP(key)
     }
-
 }
