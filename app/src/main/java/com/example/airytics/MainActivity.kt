@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         setDefaultLanguage()
 
-        binding.lottieAnimation.postOnAnimationDelayed(3000){
+        binding.lottieAnimation.postOnAnimationDelayed(4000){
             val intent = Intent(this, HostedActivity::class.java)
             startActivity(intent)
             finish()

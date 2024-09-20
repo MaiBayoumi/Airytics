@@ -40,15 +40,31 @@ class Repo private constructor(
         coordinate: Coordinate,
         language: String
     ): Flow<Response<WeatherResponse>> {
-        return flow{
+        return flow {
             try {
-                val response = remoteSource.getWeatherResponse(coordinate,language)
-                Log.d("HASSAN","${response.body()}")
+                val response = remoteSource.getWeatherResponse(coordinate, language)
+                Log.d("HASSAN", "${response.body()}")
                 emit(response)
-            }catch (e:Exception){
-                Log.e("HASSAN" ,e.message.toString())
+            } catch (e: Exception) {
+                Log.e("HASSAN", e.message.toString())
             }
 
+        }
+    }
+
+    // New function to fetch the 5-day weather forecast
+    override fun getWeatherForecast(
+        coordinate: Coordinate,
+        language: String
+    ): Flow<Response<WeatherForecastResponse>> {
+        return flow {
+            try {
+                val forecastResponse = remoteSource.getWeatherForecast(coordinate, language)
+                Log.d("HASSAN", "5-day Forecast: ${forecastResponse.body()}")
+                emit(forecastResponse)
+            } catch (e: Exception) {
+                Log.e("HASSAN", "Forecast Error: ${e.message}")
+            }
         }
     }
 

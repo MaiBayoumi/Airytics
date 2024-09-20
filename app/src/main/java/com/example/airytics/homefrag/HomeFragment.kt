@@ -162,8 +162,9 @@ class HomeFragment : Fragment() {
             tvDynamicWind.text = windSpeed
 
             // Load hourly and daily weather data if available
-            // hourlyRecyclerAdapter.submitList(weatherResponse.hourly)
-            // dailyRecyclerAdapter.submitList(weatherResponse.daily.filterIndexed { index, _ -> index != 0 }.sortedWith(compareBy { it.dt }))
+//            hourlyRecyclerAdapter.submitList(weatherResponse.hourly)
+//            dailyRecyclerAdapter.submitList(weatherResponse.daily.filterIndexed { index, _ -> index != 0 }.sortedWith(compareBy { it.dt }))
+
         }
         iconAnimation()
 

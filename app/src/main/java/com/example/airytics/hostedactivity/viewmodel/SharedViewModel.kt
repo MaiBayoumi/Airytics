@@ -83,6 +83,8 @@ class SharedViewModel(
         }
     }
 
+
+
     fun insertPlaceToFav(place: Place) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.insertPlaceToFav(place)

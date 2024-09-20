@@ -12,6 +12,8 @@ interface RepoInterface {
          language: String
     ): Flow<Response<WeatherResponse>>
 
+    fun getWeatherForecast(coordinate: Coordinate, language: String): Flow<Response<WeatherForecastResponse>>
+
     fun getCurrentLocation():Flow<Coordinate>
 
     suspend fun insertPlaceToFav(place: Place)
@@ -39,5 +41,6 @@ interface RepoInterface {
     suspend fun deleteAlarm(alarmItem: AlarmItem)
 
     fun getAllAlarms(): Flow<List<AlarmItem>>
+
 
 }
