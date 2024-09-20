@@ -49,7 +49,7 @@ class FavouriteFragment : Fragment() {
 
         binding.fabAddFav.setOnClickListener {
             val action =
-                FavouriteFragmentDirections.actionFavouriteFragmentToMapFragment(Constants.FAVOURITE)
+                FavouriteFragmentDirections.actionFavouriteFragmentToMapFragment()
             view.findNavController().navigate(action)
         }
 
@@ -103,7 +103,7 @@ class FavouriteFragment : Fragment() {
             // navigate to details fragment
             if (favouriteViewModel.checkConnection(requireContext())) {
                 val action =
-                    FavouriteFragmentDirections.actionFavouriteFragmentToDetailsFragment(it)
+                    FavouriteFragmentDirections.actionFavouriteFragmentToDetailsFragment()
                 view.findNavController().navigate(action)
             } else {
                 Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT)
