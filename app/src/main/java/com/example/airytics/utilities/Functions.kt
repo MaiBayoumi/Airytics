@@ -1,11 +1,14 @@
 package com.example.airytics.utilities
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.location.Geocoder
 import android.widget.ImageView
 import com.example.airytics.R
+import com.example.airytics.model.WeatherResponse
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -113,5 +116,24 @@ object Functions {
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 
+    @SuppressLint("SetTextI18n")
+    fun setLocationNameByGeoCoder(weatherResponse: WeatherResponse, context: Context): String {
+        try {
+            val x =
+                Geocoder(context).getFromLocation(
+                    weatherResponse.lat,
+                    weatherResponse.lon,
+                    5
+                )
+
+            return if (x != null && x[0].locality != null) {
+                x[0].locality
+            } else {
+                weatherResponse.timezone
+            }
+        } catch (e: Exception) {
+            return weatherResponse.timezone
+        }
+    }
 
 }

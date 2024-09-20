@@ -22,7 +22,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/splash1"
+            app:lottie_rawRes="@raw/animation1"
             />
 
         <ProgressBar

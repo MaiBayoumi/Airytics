@@ -1,13 +1,18 @@
 package com.example.airytics.model
 
+import com.example.airytics.database.LocalDataSourceInterface
 import com.example.airytics.location.LocationClientInterface
 import com.example.airytics.network.RemoteDataSourceInterface
+import com.example.airytics.sharedpref.SettingSPInterface
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class Repo private constructor(
     private val remoteSource: RemoteDataSourceInterface,
-    private val locationClient: LocationClientInterface
+    private val locationClient: LocationClientInterface,
+    private val localSource: LocalDataSourceInterface,
+    private val sharedSetting: SettingSPInterface
+
 ) : RepoInterface {
 
     companion object {
@@ -15,10 +20,13 @@ class Repo private constructor(
 
         fun getInstance(
             remoteSource: RemoteDataSourceInterface,
-            locationClient: LocationClientInterface
+            locationClient: LocationClientInterface,
+            localSource: LocalDataSourceInterface,
+            sharedSetting: SettingSPInterface
+
         ): Repo {
             return instance ?: synchronized(this) {
-                instance ?: Repo(remoteSource, locationClient).also { instance = it }
+                instance ?: Repo(remoteSource, locationClient,localSource,sharedSetting).also { instance = it }
             }
         }
 

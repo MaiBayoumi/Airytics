@@ -3,7 +3,7 @@ package com.example.airytics.utilities
 object Constants {
 
 
-    const val WEATHER_API_KEY = "26b5634403d6d186f90025354db175ba"
+    const val WEATHER_API_KEY = "bc3b5ec02360cd52d91374228f9413dd"
     const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
     const val SETTING = "setting"

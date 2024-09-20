@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -20,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.airytics.R
+import com.example.airytics.database.LocalDataSource
 import com.example.airytics.databinding.ActivityHostedBinding
 import com.example.airytics.databinding.InitialDialogLayoutBinding
 import com.example.airytics.hostedactivity.viewmodel.SharedViewModel
@@ -29,6 +31,7 @@ import com.example.airytics.model.Coordinate
 import com.example.airytics.model.Repo
 import com.example.airytics.network.RemoteDataSource
 import com.example.airytics.network.RetrofitHepler
+import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
 import com.example.airytics.utilities.Functions
 import com.google.android.gms.location.LocationServices
@@ -55,7 +58,9 @@ class HostedActivity : AppCompatActivity() {
         sharedViewModelFactory = SharedViewModelFactory(
             Repo.getInstance(
                 RemoteDataSource,
-                LocationClient.getInstance(LocationServices.getFusedLocationProviderClient(this))
+                LocationClient.getInstance(LocationServices.getFusedLocationProviderClient(this)),
+                LocalDataSource.getInstance(this),
+                SettingSharedPref.getInstance(this)
             )
         )
 
@@ -132,6 +137,23 @@ class HostedActivity : AppCompatActivity() {
         )
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == My_LOCATION_PERMISSION_ID) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                sharedViewModel.getLocation(this)
+            } else {
+                // Handle the case where permission is denied
+                Log.w(TAG, "Location permission denied.")
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+
 
     private fun showLocationDialog() {
         val builder = AlertDialog.Builder(this)
@@ -180,4 +202,3 @@ class HostedActivity : AppCompatActivity() {
         }
     }
 }
-

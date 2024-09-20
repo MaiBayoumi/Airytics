@@ -33,21 +33,22 @@
             android:layout_marginTop="5dp"
             android:src="@drawable/near_me_ic"
             android:visibility="gone"
-            android:clickable="true"/>
+            android:clickable="true"
+            />
 
-<!--        <com.airbnb.lottie.LottieAnimationView-->
-<!--            android:id="@+id/loading_lottie"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:lottie_autoPlay="true"-->
-<!--            app:lottie_loop="true"-->
-<!--            app:lottie_rawRes="@raw/splash1"-->
-<!--            android:visibility="gone"-->
-<!--            />-->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loading_lottie"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/animation1"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/tv_location_name"
@@ -63,7 +64,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:maxWidth="250dp"
-            android:maxHeight="100dp"/>
+            android:maxHeight="100dp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_date"
@@ -74,7 +76,9 @@
             android:textColor="@color/white"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@id/tv_location_name"
-            app:layout_constraintTop_toBottomOf="@id/tv_location_name" />
+            app:layout_constraintTop_toBottomOf="@id/tv_location_name"
+            android:visibility="gone"
+            />
 
         <ImageView
             android:id="@+id/iv_weather"
@@ -86,7 +90,9 @@
             android:scaleType="fitCenter"
             android:src="@drawable/sun"
             app:layout_constraintStart_toStartOf="@id/tv_location_name"
-            app:layout_constraintTop_toBottomOf="@id/tv_date" />
+            app:layout_constraintTop_toBottomOf="@id/tv_date"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/tv_current_degree"
@@ -101,7 +107,9 @@
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
             app:layout_constraintHorizontal_bias="0.807"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_weather" />
+            app:layout_constraintTop_toTopOf="@+id/iv_weather"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/tv_weather_status"
@@ -114,7 +122,9 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
             app:layout_constraintStart_toStartOf="@+id/tv_current_degree"
-            app:layout_constraintTop_toBottomOf="@id/tv_current_degree" />
+            app:layout_constraintTop_toBottomOf="@id/tv_current_degree"
+            android:visibility="gone"
+            />
 
         <ImageView
             android:id="@+id/sunRise"
@@ -126,7 +136,9 @@
             android:scaleType="fitCenter"
             android:src="@drawable/sunrise"
             app:layout_constraintStart_toEndOf="@id/iv_weather"
-            app:layout_constraintTop_toTopOf="@id/iv_weather" />
+            app:layout_constraintTop_toTopOf="@id/iv_weather"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/tv_sunRise"
@@ -138,7 +150,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/sunRise"
-            app:layout_constraintTop_toTopOf="@+id/sunRise" />
+            app:layout_constraintTop_toTopOf="@+id/sunRise"
+            android:visibility="gone"
+            />
 
         <ImageView
             android:id="@+id/sunSet"
@@ -150,7 +164,9 @@
             android:scaleType="fitCenter"
             android:src="@drawable/sunset"
             app:layout_constraintBottom_toBottomOf="@id/iv_weather"
-            app:layout_constraintStart_toEndOf="@id/iv_weather" />
+            app:layout_constraintStart_toEndOf="@id/iv_weather"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/tv_sunSet"
@@ -162,7 +178,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/sunSet"
-            app:layout_constraintTop_toTopOf="@+id/sunSet" />
+            app:layout_constraintTop_toTopOf="@+id/sunSet"
+            android:visibility="gone"
+            />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_details"
@@ -176,7 +194,9 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_days"
-            app:strokeWidth="0dp">
+            app:strokeWidth="0dp"
+            android:visibility="gone"
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -190,7 +210,9 @@
                     android:layout_marginStart="10dp"
                     android:src="@drawable/cloud"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/tv_dynamic_cloud"
@@ -203,7 +225,9 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@id/iv_cloud"
                     app:layout_constraintStart_toStartOf="@id/iv_cloud"
-                    app:layout_constraintTop_toBottomOf="@id/iv_cloud" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_cloud"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/tv_cloud"
@@ -215,7 +239,9 @@
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="@id/tv_dynamic_cloud"
                     app:layout_constraintStart_toStartOf="@id/tv_dynamic_cloud"
-                    app:layout_constraintTop_toBottomOf="@id/tv_dynamic_cloud" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_dynamic_cloud"
+                    android:visibility="gone"
+                    />
 
                 <ImageView
                     android:id="@+id/iv_humidity"
@@ -224,7 +250,9 @@
                     android:layout_marginStart="40dp"
                     android:src="@drawable/humidity"
                     app:layout_constraintStart_toEndOf="@+id/iv_cloud"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/tv_dynamic_humidity"
@@ -237,7 +265,9 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@id/iv_humidity"
                     app:layout_constraintStart_toStartOf="@id/iv_humidity"
-                    app:layout_constraintTop_toBottomOf="@id/iv_humidity" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_humidity"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/tv_humidity"
@@ -249,7 +279,9 @@
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="@id/tv_dynamic_humidity"
                     app:layout_constraintStart_toStartOf="@id/tv_dynamic_humidity"
-                    app:layout_constraintTop_toBottomOf="@id/tv_dynamic_humidity" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_dynamic_humidity"
+                    android:visibility="gone"
+                    />
 
                 <ImageView
                     android:id="@+id/iv_wind"
@@ -258,7 +290,9 @@
                     android:layout_marginStart="40dp"
                     android:src="@drawable/wind"
                     app:layout_constraintStart_toEndOf="@+id/iv_humidity"
-                    app:layout_constraintTop_toTopOf="@id/iv_humidity" />
+                    app:layout_constraintTop_toTopOf="@id/iv_humidity"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/tv_dynamic_wind"
@@ -270,7 +304,9 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@id/iv_wind"
                     app:layout_constraintStart_toStartOf="@id/iv_wind"
-                    app:layout_constraintTop_toBottomOf="@id/iv_wind" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_wind"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/tv_wind"
@@ -282,7 +318,9 @@
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="@id/tv_dynamic_wind"
                     app:layout_constraintStart_toStartOf="@id/tv_dynamic_wind"
-                    app:layout_constraintTop_toBottomOf="@id/tv_dynamic_wind" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_dynamic_wind"
+                    android:visibility="gone"
+                    />
 
 
                 <ImageView
@@ -295,7 +333,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/iv_wind"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/tv_dynamic_pressure"
@@ -308,7 +348,9 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/iv_pressure"
                     app:layout_constraintStart_toStartOf="@+id/iv_pressure"
-                    app:layout_constraintTop_toBottomOf="@id/iv_pressure" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_pressure"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/tv_pressure"
@@ -320,7 +362,9 @@
                     android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="@+id/tv_dynamic_pressure"
                     app:layout_constraintStart_toStartOf="@+id/tv_dynamic_pressure"
-                    app:layout_constraintTop_toBottomOf="@id/tv_dynamic_pressure" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_dynamic_pressure"
+                    android:visibility="gone"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -332,7 +376,9 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_weather"
-            tools:listitem="@layout/item_hours"/>
+            tools:listitem="@layout/item_hours"
+            android:visibility="gone"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_days"
@@ -343,6 +389,8 @@
             app:layout_constraintBaseline_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_hours"
-            tools:listitem="@layout/item_days"/>
+            tools:listitem="@layout/item_days"
+            android:visibility="gone"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
