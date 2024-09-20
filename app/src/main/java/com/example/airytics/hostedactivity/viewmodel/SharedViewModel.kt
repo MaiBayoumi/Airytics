@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.airytics.model.Coordinate
-import com.example.airytics.pojo.Place
+import com.example.airytics.model.Place
 import com.example.airytics.model.RepoInterface
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.network.ApiState

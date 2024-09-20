@@ -1,7 +1,6 @@
 package com.example.airytics.model
 
 import com.example.airytics.pojo.AlarmItem
-import com.example.airytics.pojo.Place
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 

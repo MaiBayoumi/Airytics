@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.pojo.AlarmItem
-import com.example.airytics.pojo.Place
+import com.example.airytics.model.Place
 
 
 @Database(entities = [Place::class, WeatherResponse::class, AlarmItem::class], version = 1)

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="com.example.airytics.favourite.FavouriteFragment"
+        android:name="com.example.airytics.favourite.view.FavouriteFragment"
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite" >
         <action

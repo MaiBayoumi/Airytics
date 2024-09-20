@@ -3,7 +3,7 @@ package com.example.airytics.database
 import android.content.Context
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.pojo.AlarmItem
-import com.example.airytics.pojo.Place
+import com.example.airytics.model.Place
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource private constructor(context: Context): LocalDataSourceInterface {

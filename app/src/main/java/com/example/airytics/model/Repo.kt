@@ -5,7 +5,6 @@ import com.example.airytics.database.LocalDataSourceInterface
 import com.example.airytics.location.LocationClientInterface
 import com.example.airytics.network.RemoteDataSourceInterface
 import com.example.airytics.pojo.AlarmItem
-import com.example.airytics.pojo.Place
 import com.example.airytics.sharedpref.SettingSPInterface
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
