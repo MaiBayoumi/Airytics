@@ -1,7 +1,7 @@
-package com.example.airytics.model
+package com.example.airytics.pojo
 
+import com.example.airytics.model.Weather
 import com.example.noaa.model.Temp
-import com.example.noaa.model.Weather
 
 data class Daily(
     val clouds: Int,

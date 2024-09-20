@@ -5,9 +5,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.airytics.model.AlarmItem
-import com.example.airytics.model.Place
 import com.example.airytics.model.WeatherResponse
+import com.example.airytics.pojo.AlarmItem
+import com.example.airytics.pojo.Place
 import kotlinx.coroutines.flow.Flow
 
 @Dao

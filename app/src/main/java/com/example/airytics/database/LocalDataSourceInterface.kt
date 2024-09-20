@@ -1,8 +1,8 @@
 package com.example.airytics.database
 
-import com.example.airytics.model.AlarmItem
-import com.example.airytics.model.Place
 import com.example.airytics.model.WeatherResponse
+import com.example.airytics.pojo.AlarmItem
+import com.example.airytics.pojo.Place
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSourceInterface {

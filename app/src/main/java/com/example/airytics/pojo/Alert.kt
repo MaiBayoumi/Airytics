@@ -1,4 +1,4 @@
-package com.example.airytics.model
+package com.example.airytics.pojo
 
 data class Alert(
     val sender_name: String,

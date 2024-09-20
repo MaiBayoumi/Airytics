@@ -1,13 +1,15 @@
 package com.example.airytics.model
 
+import com.example.airytics.pojo.AlarmItem
+import com.example.airytics.pojo.Place
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface RepoInterface {
 
-    suspend fun getWeatherResponse(
-        coordinate: Coordinate,
-        language: String
+     fun getWeatherResponse(
+         coordinate: Coordinate,
+         language: String
     ): Flow<Response<WeatherResponse>>
 
     fun getCurrentLocation():Flow<Coordinate>

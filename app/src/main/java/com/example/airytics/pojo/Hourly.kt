@@ -1,16 +1,16 @@
-package com.example.airytics.model
+package com.example.airytics.pojo
 
-import com.example.noaa.model.Weather
+import com.example.airytics.model.Weather
 
-data class Current(
+
+data class Hourly(
     val clouds: Int,
     val dew_point: Double,
-    val dt: Int,
+    val dt: Long,
     val feels_like: Double,
     val humidity: Int,
+    val pop: Double,
     val pressure: Int,
-    val sunrise: Int,
-    val sunset: Int,
     val temp: Double,
     val weather: List<Weather>,
     val wind_deg: Int,

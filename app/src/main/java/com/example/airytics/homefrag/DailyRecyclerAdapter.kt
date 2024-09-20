@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airytics.R
 import com.example.airytics.databinding.ItemDaysBinding
-import com.example.airytics.model.Daily
+import com.example.airytics.pojo.Daily
 import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
 import com.example.airytics.utilities.Functions

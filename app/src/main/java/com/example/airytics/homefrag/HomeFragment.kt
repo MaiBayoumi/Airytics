@@ -2,11 +2,11 @@ package com.example.airytics.homefrag
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -20,7 +20,6 @@ import com.example.airytics.model.Repo
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.network.ApiState
 import com.example.airytics.network.RemoteDataSource
-import com.example.airytics.network.RemoteDataSourceInterface
 import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
 import com.example.airytics.utilities.Functions
@@ -64,28 +63,30 @@ class HomeFragment : Fragment() {
         dailyRecyclerAdapter = DailyRecyclerAdapter()
         binding.rvDays.adapter = dailyRecyclerAdapter
 
+
         lifecycleScope.launch(Dispatchers.IO) {
-            sharedViewModel.weatherResponseStateFlow.collect {
-                when (it) {
+            sharedViewModel.weatherResponseStateFlow.collect { apiState ->
+                Log.d("HASSAN", "Received API state: $apiState") // Log the received state
+                when (apiState) {
                     is ApiState.Success -> {
                         withContext(Dispatchers.Main) {
-                            setDataToViews(it.weatherResponse)
+                            setDataToViews(apiState.weatherResponse)
                         }
-                        insertCashedData(it.weatherResponse)
+                        insertCashedData(apiState.weatherResponse)
                     }
-
                     is ApiState.Loading -> {
                         withContext(Dispatchers.Main) {
                             binding.loadingLottie.visibility = View.VISIBLE
                         }
                     }
-
-                    else -> {
+                    is ApiState.Failure -> {
+                        Log.e("HASSAN", "Error: ${apiState.errorMessage}")
+                        Log.d("HASSAN", "Using API Key: ${Constants.WEATHER_API_KEY}")
                         withContext(Dispatchers.Main) {
                             binding.loadingLottie.visibility = View.GONE
                             Toast.makeText(
                                 requireContext(),
-                                (it as ApiState.Failure).errorMessage,
+                                apiState.errorMessage,
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -93,6 +94,8 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+
 
         //for near me iconBtn
         if (sharedViewModel.readStringFromSettingSP(Constants.LOCATION) == Constants.MAP) {
@@ -122,67 +125,68 @@ class HomeFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setDataToViews(weatherResponse: WeatherResponse) {
         makeViewsVisible()
-        Functions.setIcon(weatherResponse.current.weather[0].icon, binding.ivWeather)
+        Log.d("HASSAN","current data ${weatherResponse}")
+        Functions.setIcon(weatherResponse.weather[0].icon, binding.ivWeather)
 
         binding.apply {
 
             tvLocationName.text =
                 Functions.setLocationNameByGeoCoder(weatherResponse, requireContext())
-            tvWeatherStatus.text = weatherResponse.current.weather[0].description
+            tvWeatherStatus.text = weatherResponse.weather[0].description
             tvDynamicPressure.text =
-                String.format("%d %s", weatherResponse.current.pressure, getString(R.string.hpa))
+                String.format("%d %s", weatherResponse.main.pressure, getString(R.string.hpa))
             tvDynamicHumidity.text = String.format(
                 "%d %s",
-                weatherResponse.current.humidity,
+                weatherResponse.main.humidity,
                 getString(R.string.percentage)
             )
             tvDynamicCloud.text = String.format(
                 "%d %s",
-                weatherResponse.current.clouds,
+                weatherResponse.clouds,
                 getString(R.string.percentage)
             )
 
 
             if (sharedViewModel.readStringFromSettingSP(Constants.LANGUAGE) == Constants.ARABIC) {
-                tvDate.text = Functions.fromUnixToString(weatherResponse.current.dt, "ar")
-                tvSunRise.text = Functions.fromUnixToStringTime(weatherResponse.current.sunrise, "ar")
-                tvSunSet.text = Functions.fromUnixToStringTime(weatherResponse.current.sunset, "ar")
+                tvDate.text = Functions.fromUnixToString(weatherResponse.date, "ar")
+                tvSunRise.text = Functions.fromUnixToStringTime(weatherResponse.sys.sunrise, "ar")
+                tvSunSet.text = Functions.fromUnixToStringTime(weatherResponse.sys.sunset, "ar")
             } else {
-                tvDate.text = Functions.fromUnixToString(weatherResponse.current.dt, "en")
-                tvSunRise.text = Functions.fromUnixToStringTime(weatherResponse.current.sunrise, "en")
-                tvSunSet.text = Functions.fromUnixToStringTime(weatherResponse.current.sunset, "en")
+                tvDate.text = Functions.fromUnixToString(weatherResponse.date, "en")
+                tvSunRise.text = Functions.fromUnixToStringTime(weatherResponse.sys.sunrise, "en")
+                tvSunSet.text = Functions.fromUnixToStringTime(weatherResponse.sys.sunset, "en")
             }
 
             when (sharedViewModel.readStringFromSettingSP(Constants.TEMPERATURE)) {
                 Constants.KELVIN -> tvCurrentDegree.text = String.format(
                     "%.1f°${getString(R.string.k)}",
-                    weatherResponse.current.temp + 273.15
+                    weatherResponse.main.temp + 273.15
                 )
 
                 Constants.FAHRENHEIT -> tvCurrentDegree.text = String.format(
                     "%.1f°${getString(R.string.f)}",
-                    weatherResponse.current.temp * 9 / 5 + 32
+                    weatherResponse.main.temp * 9 / 5 + 32
                 )
 
                 else -> tvCurrentDegree.text =
-                    String.format("%.1f°${getString(R.string.c)}", weatherResponse.current.temp)
+                    String.format("%.1f°${getString(R.string.c)}", weatherResponse.main.temp)
             }
 
             when (sharedViewModel.readStringFromSettingSP(Constants.WIND_SPEED)) {
                 Constants.MILE_HOUR -> tvDynamicWind.text = String.format(
                     "%.1f ${getString(R.string.mile_hour)}",
-                    weatherResponse.current.wind_speed * 2.237
+                    weatherResponse.wind.speed * 2.237
                 )
 
                 else -> tvDynamicWind.text = String.format(
                     "%.1f ${getString(R.string.meter_sec)}",
-                    weatherResponse.current.wind_speed
+                    weatherResponse.wind.speed
                 )
             }
 
-            hourlyRecyclerAdapter.submitList(weatherResponse.hourly)
-            dailyRecyclerAdapter.submitList(weatherResponse.daily.filterIndexed { index, _ -> index != 0 }
-                .sortedWith(compareBy { it.dt }))
+//            hourlyRecyclerAdapter.submitList(weatherResponse.hourly)
+//            dailyRecyclerAdapter.submitList(weatherResponse.daily.filterIndexed { index, _ -> index != 0 }
+//                .sortedWith(compareBy { it.dt }))
         }
 
     }

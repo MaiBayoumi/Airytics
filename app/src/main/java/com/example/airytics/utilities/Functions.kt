@@ -121,18 +121,18 @@ object Functions {
         try {
             val x =
                 Geocoder(context).getFromLocation(
-                    weatherResponse.lat,
-                    weatherResponse.lon,
+                    weatherResponse.coord.lat,
+                    weatherResponse.coord.lon,
                     5
                 )
 
             return if (x != null && x[0].locality != null) {
                 x[0].locality
             } else {
-                weatherResponse.timezone
+                weatherResponse.timezone.toString()
             }
         } catch (e: Exception) {
-            return weatherResponse.timezone
+            return weatherResponse.timezone.toString()
         }
     }
 

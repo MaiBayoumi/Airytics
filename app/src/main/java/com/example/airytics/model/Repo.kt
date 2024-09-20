@@ -1,10 +1,14 @@
 package com.example.airytics.model
 
+import android.util.Log
 import com.example.airytics.database.LocalDataSourceInterface
 import com.example.airytics.location.LocationClientInterface
 import com.example.airytics.network.RemoteDataSourceInterface
+import com.example.airytics.pojo.AlarmItem
+import com.example.airytics.pojo.Place
 import com.example.airytics.sharedpref.SettingSPInterface
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 class Repo private constructor(
@@ -32,11 +36,20 @@ class Repo private constructor(
 
     }
 
-    override suspend fun getWeatherResponse(
+    override  fun getWeatherResponse(
         coordinate: Coordinate,
         language: String
     ): Flow<Response<WeatherResponse>> {
-        return remoteSource.getWeatherResponse(coordinate, language)
+        return flow{
+            try {
+                val response = remoteSource.getWeatherResponse(coordinate,language)
+                Log.d("HASSAN","${response.body()}")
+                emit(response)
+            }catch (e:Exception){
+                Log.e("HASSAN" ,e.message.toString())
+            }
+
+        }
     }
 
     override fun getCurrentLocation(): Flow<Coordinate> {

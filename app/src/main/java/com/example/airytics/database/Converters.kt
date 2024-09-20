@@ -1,61 +1,137 @@
 package com.example.airytics.database
 
 import androidx.room.TypeConverter
-import com.example.airytics.model.Alert
+import com.example.airytics.model.*
 import com.example.airytics.model.Current
-import com.example.airytics.model.Daily
-import com.example.airytics.model.Hourly
+import com.example.airytics.pojo.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class Converters {
 
+    private val gson = Gson()
+
+    // Convert Coord
     @TypeConverter
-    fun fromCurrentToString(current: Current): String {
-        return Gson().toJson(current)
+    fun fromCoord(coord: Coordinate?): String? {
+        return gson.toJson(coord)
     }
 
     @TypeConverter
-    fun fromStringToCurrent(stringCurrent: String): Current {
-        return Gson().fromJson(stringCurrent, Current::class.java)
+    fun toCoord(coordJson: String?): Coordinate? {
+        return coordJson?.let {
+            gson.fromJson(it, Coordinate::class.java)
+        }
+    }
+
+    // Convert Clouds
+    @TypeConverter
+    fun fromClouds(clouds: Clouds?): String? {
+        return gson.toJson(clouds)
     }
 
     @TypeConverter
-    fun fromDailyToString(daily: List<Daily>): String {
-        return Gson().toJson(daily)
+    fun toClouds(cloudsJson: String?): Clouds? {
+        return cloudsJson?.let {
+            gson.fromJson(it, Clouds::class.java)
+        }
     }
 
     @TypeConverter
-    fun fromStringToDaily(stringDaily: String): List<Daily> {
-        return Gson().fromJson(stringDaily, object : TypeToken<List<Daily>>() {}.type)
-    }
-
-
-    @TypeConverter
-    fun fromHourlyToString(hourly: List<Hourly>): String {
-        return Gson().toJson(hourly)
+    fun fromMain(main: Main?): String? {
+        return gson.toJson(main)
     }
 
     @TypeConverter
-    fun fromStringToHourly(stringHourly: String): List<Hourly> {
-        return Gson().fromJson(stringHourly, object : TypeToken<List<Hourly>>() {}.type)
+    fun toMain(mainJson: String?): Main? {
+        return mainJson?.let {
+            gson.fromJson(it, Main::class.java)
+        }
     }
 
+    @TypeConverter
+    fun fromSys(sys: Sys?): String? {
+        return gson.toJson(sys)
+    }
 
+    @TypeConverter
+    fun toSys(sysJason: String?): Sys? {
+        return sysJason?.let {
+            gson.fromJson(it, Sys::class.java)
+        }
+    }
+
+    @TypeConverter
+    fun fromWeatherList(weather: List<Weather>?): String? {
+        return gson.toJson(weather)
+    }
+
+    @TypeConverter
+    fun toWeatherList(weatherJson: String?): List<Weather>? {
+        return weatherJson?.let {
+            gson.fromJson(it, object : TypeToken<List<Weather>>() {}.type)
+        }
+    }
+
+    @TypeConverter
+    fun fromWind(wind: Wind?): String? {
+        return wind?.let { gson.toJson(it) }
+    }
+
+    // Convert JSON string back to Wind object
+    @TypeConverter
+    fun toWind(windJson: String?): Wind? {
+        return windJson?.let { gson.fromJson(it, Wind::class.java) }
+    }
+    // Convert Current
+    @TypeConverter
+    fun fromCurrentToString(current: Current?): String? {
+        return gson.toJson(current)
+    }
+
+    @TypeConverter
+    fun fromStringToCurrent(stringCurrent: String?): Current? {
+        return stringCurrent?.let {
+            gson.fromJson(it, Current::class.java)
+        }
+    }
+
+    // Convert Daily
+    @TypeConverter
+    fun fromDailyToString(daily: List<Daily>?): String? {
+        return gson.toJson(daily)
+    }
+
+    @TypeConverter
+    fun fromStringToDaily(stringDaily: String?): List<Daily>? {
+        return stringDaily?.let {
+            gson.fromJson(it, object : TypeToken<List<Daily>>() {}.type)
+        }
+    }
+
+    // Convert Hourly
+    @TypeConverter
+    fun fromHourlyToString(hourly: List<Hourly>?): String? {
+        return gson.toJson(hourly)
+    }
+
+    @TypeConverter
+    fun fromStringToHourly(stringHourly: String?): List<Hourly>? {
+        return stringHourly?.let {
+            gson.fromJson(it, object : TypeToken<List<Hourly>>() {}.type)
+        }
+    }
+
+    // Convert Alert
     @TypeConverter
     fun fromAlertToString(alert: List<Alert>?): String? {
-        alert?.let {
-            return Gson().toJson(alert)
-        }
-        return null
+        return gson.toJson(alert)
     }
 
     @TypeConverter
     fun fromStringToAlert(stringAlert: String?): List<Alert>? {
-        stringAlert?.let {
-            return Gson().fromJson(stringAlert, object : TypeToken<List<Alert>>() {}.type)
+        return stringAlert?.let {
+            gson.fromJson(it, object : TypeToken<List<Alert>>() {}.type)
         }
-        return null
     }
-
 }

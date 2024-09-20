@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -17,9 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import com.example.airytics.R
 import com.example.airytics.database.LocalDataSource
 import com.example.airytics.databinding.ActivityHostedBinding
@@ -30,17 +27,15 @@ import com.example.airytics.location.LocationClient
 import com.example.airytics.model.Coordinate
 import com.example.airytics.model.Repo
 import com.example.airytics.network.RemoteDataSource
-import com.example.airytics.network.RetrofitHepler
 import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
 import com.example.airytics.utilities.Functions
 import com.google.android.gms.location.LocationServices
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-public const val TAG = "location"
+const val TAG = "location"
 const val My_LOCATION_PERMISSION_ID = 5005
 
 class HostedActivity : AppCompatActivity() {
@@ -87,13 +82,13 @@ class HostedActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             sharedViewModel.coordinateStateFlow.collect {
-                Log.w(TAG, "onViewCreated: from fragment ${it.latitude}")
-                Log.w(TAG, "onViewCreated: from fragment ${it.longitude}")
-                if (it.latitude != 0.0) {
+                Log.d("MAI", "onViewCreated: from fragment ${it.lat}")
+                Log.d("MAI", "onViewCreated: from fragment ${it.lon}")
+                if (it.lat != 0.0) {
                     if (sharedViewModel.readStringFromSettingSP(Constants.LANGUAGE) == Constants.ARABIC) {
-                        sharedViewModel.getWeatherData(Coordinate(it.latitude, it.longitude), "ar")
+                        sharedViewModel.getWeatherData(Coordinate(it.lat, it.lon), "ar")
                     } else {
-                        sharedViewModel.getWeatherData(Coordinate(it.latitude, it.longitude), "en")
+                        sharedViewModel.getWeatherData(Coordinate(it.lat, it.lon), "en")
                     }
                 }
             }
@@ -136,24 +131,6 @@ class HostedActivity : AppCompatActivity() {
             My_LOCATION_PERMISSION_ID
         )
     }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == My_LOCATION_PERMISSION_ID) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                sharedViewModel.getLocation(this)
-            } else {
-                // Handle the case where permission is denied
-                Log.w(TAG, "Location permission denied.")
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-
 
     private fun showLocationDialog() {
         val builder = AlertDialog.Builder(this)
