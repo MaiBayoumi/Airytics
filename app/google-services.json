@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780444187535",
+    "project_id": "airytics",
+    "storage_bucket": "airytics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780444187535:android:76d5e34c69c8562f8ae9fa",
+        "android_client_info": {
+          "package_name": "com.example.airytics"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjt6iWm1pMQFXl9aI8DvpFgiS2sPaqvmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
