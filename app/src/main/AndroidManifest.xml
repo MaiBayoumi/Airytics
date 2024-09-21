@@ -22,9 +22,16 @@
             android:name=".hostedactivity.view.HostedActivity"
             android:exported="false" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAwwpG5-0YkylO4vtt9GwPpS6KC7qQHM_4" />
+            <!-- OSMDroid cache configuration -->
+<!--            <meta-data-->
+<!--                android:name="osmdroid.basePath"-->
+<!--                android:value="osmdroid"/>-->
+<!--            <meta-data-->
+<!--                android:name="osmdroid.cachePath"-->
+<!--                android:value="osmdroid/cache"/>-->
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="AIzaSyAwwpG5-0YkylO4vtt9GwPpS6KC7qQHM_4" />-->
 
         <activity
             android:name=".MainActivity"
