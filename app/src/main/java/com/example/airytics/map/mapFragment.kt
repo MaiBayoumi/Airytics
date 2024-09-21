@@ -22,18 +22,18 @@ import com.example.airytics.network.RemoteDataSource
 import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.MarkerOptions
 import org.osmdroid.config.Configuration
-import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
 class mapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
-    private var marker: Marker? = null
+    private var marker: com.google.android.gms.maps.model.Marker? = null
     private var coordinate: Coordinate? = null
     private lateinit var sharedViewModel: SharedViewModel
-    private lateinit var mapView: MapView
 
     override fun onStart() {
         super.onStart()
@@ -52,21 +52,11 @@ class mapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        googleMapHandler()
 
-        // Initialize OSM configuration
-        Configuration.getInstance().load(context, requireContext().getSharedPreferences("osm_pref", 0))
-
-        mapView = binding.map
-        mapView.setMultiTouchControls(true)
-
-        val mapController = mapView.controller
-        mapController.setZoom(9.5)
-        mapController.setCenter(GeoPoint(0.0, 0.0)) // Default starting location
-
-        // Load bundle arguments
+        // Fetch the argument from Bundle
         val kind = arguments?.getString("kind")
 
-        // Set up view model
         val factory = SharedViewModelFactory(
             Repo.getInstance(
                 RemoteDataSource, LocationClient.getInstance(
@@ -93,47 +83,27 @@ class mapFragment : Fragment() {
                     .show()
             }
         }
-
-        // OSM map handling
-        mapViewHandler()
     }
 
-    private fun mapViewHandler() {
-        // Clear any existing overlays
-        mapView.overlays.clear()
+    private fun showProgressBar() {
+        binding.btnSaveLocation.visibility = View.GONE
+        binding.prProgressMap.visibility = View.VISIBLE
+    }
 
-        // Add MapEventsOverlay to handle click events
-        val mapEventsReceiver = object : MapEventsReceiver {
-            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                p?.let {
-                    // Update the coordinate with the clicked point
-                    coordinate = Coordinate(it.latitude, it.longitude)
-
-                    // Remove previous marker if it exists
-                    marker?.let { mapView.overlays.remove(it) }
-
-                    // Create and place a new marker
-                    marker = Marker(mapView).apply {
-                        position = it
-                        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                    }
-                    mapView.overlays.add(marker)
-                    mapView.invalidate() // Refresh map
-                }
-                return true
-            }
-
-            override fun longPressHelper(p: GeoPoint?): Boolean {
-                // Handle long press if needed
-                return false
+    private fun googleMapHandler() {
+        val supportMapFragment: SupportMapFragment =
+            childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        supportMapFragment.getMapAsync { map ->
+            map.setOnMapClickListener {
+                marker?.remove()
+                coordinate = Coordinate(it.latitude, it.longitude)
+                marker = map.addMarker(
+                    MarkerOptions()
+                        .position(it)
+                )
             }
         }
-
-        // Add the event overlay to the map
-        val mapEventsOverlay = org.osmdroid.views.overlay.MapEventsOverlay(mapEventsReceiver)
-        mapView.overlays.add(mapEventsOverlay)
     }
-
 
     private fun handleLocationSave(kind: String?) {
         if (kind == Constants.REGULAR) {
@@ -165,11 +135,6 @@ class mapFragment : Fragment() {
             )
             navigateBack()
         }
-    }
-
-    private fun showProgressBar() {
-        binding.btnSaveLocation.visibility = View.GONE
-        binding.prProgressMap.visibility = View.VISIBLE
     }
 
     private fun navigateBack() {

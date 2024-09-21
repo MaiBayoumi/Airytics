@@ -12,9 +12,9 @@
     <string name="sunny_day">Sunny</string>
     <string name="sunrise">06:00 AM</string>
     <string name="sunset">07:00 PM</string>
-    <string name="percentage">0%</string>
+    <string name="percentage">%</string>
     <string name="cloud">cloud</string>
-    <string name="_77">60%</string>
+    <string name="_77">%</string>
     <string name="humidity">Humidity</string>
     <string name="wind">Wind</string>
     <string name="windms">6 m/sec</string>
@@ -52,4 +52,5 @@
     <string name="ok">OK</string>
     <string name="save_location">Save</string>
     <string name="hpa">hpa</string>
+    <string name="searching">"Search "</string>
 </resources>
