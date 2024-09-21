@@ -49,7 +49,7 @@ class FavouriteFragment : Fragment() {
 
         binding.fabAddFav.setOnClickListener {
             val action =
-                FavouriteFragmentDirections.actionFavouriteFragmentToMapFragment()
+                FavouriteFragmentDirections.actionFavouriteFragmentToMapFragment(Constants.FAVOURITE)
             view.findNavController().navigate(action)
         }
 
@@ -80,7 +80,7 @@ class FavouriteFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 place = favouriteRecyclerAdapter.currentList[position]
-                val mediaPlayer = MediaPlayer.create(context, R.raw.deleted)
+                val mediaPlayer = MediaPlayer.create(context, R.raw.delete)
                 mediaPlayer.start()
 
                 mediaPlayer.setOnCompletionListener { mp ->
@@ -103,7 +103,7 @@ class FavouriteFragment : Fragment() {
             // navigate to details fragment
             if (favouriteViewModel.checkConnection(requireContext())) {
                 val action =
-                    FavouriteFragmentDirections.actionFavouriteFragmentToDetailsFragment()
+                    FavouriteFragmentDirections.actionFavouriteFragmentToDetailsFragment(it)
                 view.findNavController().navigate(action)
             } else {
                 Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT)

@@ -65,7 +65,9 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            android:visibility="gone"
+
+            />
 
         <TextView
             android:id="@+id/tv_date"
@@ -82,9 +84,9 @@
 
         <ImageView
             android:id="@+id/iv_weather"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="100dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginStart="108dp"
             android:layout_marginTop="4dp"
             android:elevation="9dp"
             android:scaleType="fitCenter"
@@ -99,18 +101,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="10dp"
             android:elevation="10dp"
             android:text="@string/_28"
             android:textColor="@color/white"
-            android:textSize="40sp"
+            android:textSize="35sp"
             app:layout_constraintBottom_toTopOf="@id/tv_weather_status"
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
+            app:layout_constraintHorizontal_bias="0.659"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_weather"
             android:visibility="gone"
-            />
+            app:layout_constraintTop_toTopOf="@+id/iv_weather" />
 
         <TextView
             android:id="@+id/tv_weather_status"
@@ -118,11 +120,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/sunny_day"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
+            app:layout_constraintHorizontal_bias="0.508"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_current_degree"
             android:visibility="gone"
@@ -163,7 +166,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="20dp"
             android:elevation="9dp"
             android:scaleType="fitCenter"
             android:src="@drawable/sunset"
@@ -203,6 +206,7 @@
             app:layout_constraintTop_toBottomOf="@id/rv_days"
             app:strokeWidth="0dp"
             android:visibility="gone"
+
             >
 
             <androidx.constraintlayout.widget.ConstraintLayout
