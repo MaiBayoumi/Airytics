@@ -3,6 +3,8 @@ package com.example.airytics.model
 import android.util.Log
 import com.example.airytics.database.LocalDataSourceInterface
 import com.example.airytics.location.LocationClientInterface
+import com.example.airytics.network.ApiState
+import com.example.airytics.network.ForecastState
 import com.example.airytics.network.RemoteDataSourceInterface
 import com.example.airytics.pojo.AlarmItem
 import com.example.airytics.sharedpref.SettingSPInterface
@@ -42,27 +44,48 @@ class Repo private constructor(
         return flow {
             try {
                 val response = remoteSource.getWeatherResponse(coordinate, language)
-                Log.d("HASSAN", "${response.body()}")
                 emit(response)
             } catch (e: Exception) {
-                Log.e("HASSAN", e.message.toString())
+                Log.e("error", e.message.toString())
             }
-
         }
     }
 
-    // New function to fetch the 5-day weather forecast
+//    @OptIn(FlowPreview::class)
+//    override fun getWeatherByCountryName(
+//        countryName: String,
+//        language: String,
+//        units: String
+//    ): Flow<State<WeatherForLocation>> = flow {
+//        emit(State.Loading)
+//        try {
+//            val response = remoteDataSource.getWeatherByCountryName(countryName,language,units)
+//            if (response.isSuccessful && response.body() != null) {
+//                emit(State.Success(response.body()!!))
+//            } else {
+//                emit(State.Error(response.message().orEmpty()))
+//            }
+//        } catch (e: Exception) {
+//            emit(State.Error(e.message.orEmpty()))
+//        }
+//    }.timeout(10.seconds).catch {
+//        emit(State.Error("Time out"))
+//    }
+
     override fun getWeatherForecast(
         coordinate: Coordinate,
         language: String
-    ): Flow<Response<WeatherForecastResponse>> {
+    ): Flow<ForecastState> {
         return flow {
             try {
                 val forecastResponse = remoteSource.getWeatherForecast(coordinate, language)
-                Log.d("HASSAN", "5-day Forecast: ${forecastResponse.body()}")
-                emit(forecastResponse)
+                if (forecastResponse.isSuccessful && forecastResponse.body() != null) {
+                    emit(ForecastState.Success(forecastResponse.body()!!))
+                }else{
+                    emit (ForecastState.Failure(forecastResponse.message()))
+                }
             } catch (e: Exception) {
-                Log.e("HASSAN", "Forecast Error: ${e.message}")
+                emit (ForecastState.Failure(e.message.toString()))
             }
         }
     }

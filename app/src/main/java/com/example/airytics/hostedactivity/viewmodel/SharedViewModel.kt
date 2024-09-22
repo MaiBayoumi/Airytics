@@ -1,13 +1,18 @@
 package com.example.airytics.hostedactivity.viewmodel
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.airytics.model.Coordinate
+import com.example.airytics.model.Daily
 import com.example.airytics.model.Place
 import com.example.airytics.model.RepoInterface
+import com.example.airytics.model.WeatherForecastResponse
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.network.ApiState
+import com.example.airytics.network.ForecastState
 import com.example.airytics.utilities.Constants
 import com.example.noaa.utilities.PermissionUtility
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +25,9 @@ import kotlinx.coroutines.launch
 class SharedViewModel(
     private val repo: RepoInterface
 ) : ViewModel() {
+    init {
+        getForecastData(Coordinate(0.0,0.0),"en")
+    }
 
     private val _locationStatusMutableStateFlow: MutableStateFlow<String> = MutableStateFlow("")
     val locationStatusStateFlow: StateFlow<String> get() = _locationStatusMutableStateFlow
@@ -31,6 +39,10 @@ class SharedViewModel(
     private val _weatherResponseMutableStateFlow: MutableStateFlow<ApiState> =
         MutableStateFlow(ApiState.Loading)
     val weatherResponseStateFlow: StateFlow<ApiState> get() = _weatherResponseMutableStateFlow
+
+    private val _weatherResponseMutableForecastStateFlow: MutableStateFlow<ForecastState> =
+        MutableStateFlow(ForecastState.Loading)
+    val weatherResponseForeStateFlow: StateFlow<ForecastState> get() = _weatherResponseMutableForecastStateFlow
 
     fun getLocation(context: Context) {
         if (PermissionUtility.checkConnection(context)) {
@@ -68,21 +80,26 @@ class SharedViewModel(
         viewModelScope.launch(Dispatchers.IO) {
                 repo.getWeatherResponse(coordinate, language)
                     .catch { exception ->
-                        // Handle the failure case
                         _weatherResponseMutableStateFlow.value = ApiState.Failure(exception.message ?: "Unknown error occurred")
                     }
                     .collectLatest { weatherResponse ->
                         if (weatherResponse.isSuccessful) {
-                            // If the response is successful, update the state with the result
                             _weatherResponseMutableStateFlow.value = ApiState.Success(weatherResponse.body()!!)
                         } else {
-                            // Handle API error response
                             _weatherResponseMutableStateFlow.value = ApiState.Failure(weatherResponse.message())
                         }
                     }
         }
     }
 
+    fun getForecastData(coordinate: Coordinate,language: String){
+        viewModelScope.launch (Dispatchers.IO ){
+            repo.getWeatherForecast(coordinate,language)
+                .collectLatest { weatherResponseForeList ->
+                    _weatherResponseMutableForecastStateFlow.value= weatherResponseForeList
+                }
+        }
+    }
 
 
     fun insertPlaceToFav(place: Place) {

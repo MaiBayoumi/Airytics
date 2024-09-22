@@ -17,9 +17,12 @@ import com.example.airytics.databinding.FragmentHomeBinding
 import com.example.airytics.hostedactivity.viewmodel.SharedViewModel
 import com.example.airytics.hostedactivity.viewmodel.SharedViewModelFactory
 import com.example.airytics.location.LocationClient
+import com.example.airytics.model.Daily
 import com.example.airytics.model.Repo
+import com.example.airytics.model.WeatherForecastResponse
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.network.ApiState
+import com.example.airytics.network.ForecastState
 import com.example.airytics.network.RemoteDataSource
 import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
@@ -67,31 +70,58 @@ class HomeFragment : Fragment() {
 
 
         lifecycleScope.launch(Dispatchers.IO) {
-            sharedViewModel.weatherResponseStateFlow.collect { apiState ->
-                when (apiState) {
-                    is ApiState.Success -> {
-                        withContext(Dispatchers.Main) {
-                            setDataToViews(apiState.weatherResponse)
+            launch(Dispatchers.IO){
+                sharedViewModel.weatherResponseForeStateFlow.collect{foreCastStateVar->
+                    when(foreCastStateVar){
+                        is ForecastState.Failure -> {
+                            Toast.makeText(
+                                requireContext(), foreCastStateVar.errorMessage,Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        insertCashedData(apiState.weatherResponse)
-                    }
-                    is ApiState.Loading -> {
-                        withContext(Dispatchers.Main) {
+                        com.example.airytics.network.ForecastState.Loading -> {
                             binding.loadingLottie.visibility = View.VISIBLE
                         }
+                        is ForecastState.Success -> {
+                            val dailyList = parseForecastResponse(foreCastStateVar.weatherForecast)
+                            Log.d("HASSAN", "$dailyList")
+                            withContext(Dispatchers.Main){
+                                dailyRecyclerAdapter.submitList(dailyList) // Update adapter with daily data
+                                binding.loadingLottie.visibility = View.GONE
+                            }
+
+                        }
                     }
-                    is ApiState.Failure -> {
-                        withContext(Dispatchers.Main) {
-                            binding.loadingLottie.visibility = View.GONE
-                            Toast.makeText(
-                                requireContext(),
-                                apiState.errorMessage,
-                                Toast.LENGTH_SHORT
-                            ).show()
+
+                }
+            }
+            launch{
+                sharedViewModel.weatherResponseStateFlow.collect { apiState ->
+                    when (apiState) {
+                        is ApiState.Success -> {
+                            withContext(Dispatchers.Main) {
+                                setDataToViews(apiState.weatherResponse)
+                            }
+                            insertCashedData(apiState.weatherResponse)
+                        }
+                        is ApiState.Loading -> {
+                            withContext(Dispatchers.Main) {
+                                binding.loadingLottie.visibility = View.VISIBLE
+                            }
+                        }
+                        is ApiState.Failure -> {
+                            withContext(Dispatchers.Main) {
+                                binding.loadingLottie.visibility = View.GONE
+                                Toast.makeText(
+                                    requireContext(),
+                                    apiState.errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }
             }
+
         }
 
 
@@ -128,14 +158,13 @@ class HomeFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setDataToViews(weatherResponse: WeatherResponse) {
         makeViewsVisible()
-        Log.d("HASSAN", "current data $weatherResponse")
 
         Functions.setIcon(weatherResponse.weather[0].icon, binding.ivWeather)
 
         binding.apply {
             tvLocationName.text = Functions.setLocationNameByGeoCoder(weatherResponse, requireContext())
 
-            tvWeatherStatus.text = weatherResponse.weather[0].description
+            tvWeatherStatus.text = weatherResponse.weather[0].description.capitalize()
 
             tvDynamicPressure.text = String.format("%d %s", weatherResponse.main.pressure, getString(R.string.hpa))
             tvDynamicHumidity.text = String.format("%d %s", weatherResponse.main.humidity, getString(R.string.percentage))
@@ -161,16 +190,42 @@ class HomeFragment : Fragment() {
             }
             tvDynamicWind.text = windSpeed
 
-            // Load hourly and daily weather data if available
-//            hourlyRecyclerAdapter.submitList(weatherResponse.hourly)
-//            dailyRecyclerAdapter.submitList(weatherResponse.daily.filterIndexed { index, _ -> index != 0 }.sortedWith(compareBy { it.dt }))
-
         }
         iconAnimation()
 
     }
 
+    private fun parseForecastResponse(response: WeatherForecastResponse): List<Daily> {
+        val dailyList = mutableListOf<Daily>()
+        val dayGroups = response.list.groupBy { forecast ->
+            forecast.dt_txt.substring(0, 10)
+        }.values.take(5)
 
+        for (dayGroup in dayGroups) {
+            val firstEntry = dayGroup.first()
+            val day = firstEntry.dt_txt.substring(0, 10)
+            val weatherDescription = firstEntry.weather[0].description.capitalize()
+            val weatherIcon = firstEntry.weather[0].icon // Get the weather icon code
+
+            val temperatureUnit = sharedViewModel.readStringFromSettingSP(Constants.TEMPERATURE)
+
+            val lowTemp = when (temperatureUnit) {
+                Constants.KELVIN -> String.format("%.1f°K", dayGroup.minOf { it.main.temp_min })
+                Constants.FAHRENHEIT -> String.format("%.1f°F", (dayGroup.minOf { it.main.temp_min } - 273.15) * 9 / 5 + 32)
+                else -> String.format("%.1f°C", dayGroup.minOf { it.main.temp_min } - 273.15)
+            }
+
+            val highTemp = when (temperatureUnit) {
+                Constants.KELVIN -> String.format("%.1f°K", dayGroup.maxOf { it.main.temp_max })
+                Constants.FAHRENHEIT -> String.format("%.1f°F", (dayGroup.maxOf { it.main.temp_max } - 273.15) * 9 / 5 + 32)
+                else -> String.format("%.1f°C", dayGroup.maxOf { it.main.temp_max } - 273.15)
+            }
+
+            dailyList.add(Daily(day, weatherDescription, lowTemp, highTemp, weatherIcon))
+        }
+
+        return dailyList
+    }
 
     private fun makeViewsVisible() {
         binding.apply {

@@ -1,5 +1,6 @@
 package com.example.airytics.model
 
+import com.example.airytics.network.ForecastState
 import com.example.airytics.pojo.AlarmItem
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -11,7 +12,7 @@ interface RepoInterface {
          language: String
     ): Flow<Response<WeatherResponse>>
 
-    fun getWeatherForecast(coordinate: Coordinate, language: String): Flow<Response<WeatherForecastResponse>>
+    fun getWeatherForecast(coordinate: Coordinate, language: String): Flow<ForecastState>
 
     fun getCurrentLocation():Flow<Coordinate>
 

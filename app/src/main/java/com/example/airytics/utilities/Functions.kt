@@ -52,7 +52,7 @@ object Functions {
         return sdf.format(date).uppercase(Locale.ROOT)
     }
 
-    fun formatDayOfWeek(timestamp: Int, context: Context, lang: String): String {
+    fun formatDayOfWeek(timestamp: Long, context: Context, lang: String): String {
         val sdf = SimpleDateFormat("EEE", Locale(lang))
         val calendar: Calendar = Calendar.getInstance()
         val currentDay = calendar.get(Calendar.DAY_OF_YEAR)
