@@ -1,7 +1,8 @@
-package com.example.airytics.map
+package com.example.airytics.map.view
 
 import android.location.Geocoder
 import android.os.Bundle
+import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,16 +25,14 @@ import com.example.airytics.utilities.Constants
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
-import org.osmdroid.config.Configuration
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
+import kotlinx.coroutines.Job
 
 class mapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
     private var marker: com.google.android.gms.maps.model.Marker? = null
     private var coordinate: Coordinate? = null
     private lateinit var sharedViewModel: SharedViewModel
+    private var job: Job? = null
 
     override fun onStart() {
         super.onStart()
@@ -48,6 +47,8 @@ class mapFragment : Fragment() {
     ): View {
         binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
+        setupSearchBar()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -136,6 +137,14 @@ class mapFragment : Fragment() {
             navigateBack()
         }
     }
+
+    private fun setupSearchBar() {
+
+        }
+
+
+
+
 
     private fun navigateBack() {
         val fragmentManager = parentFragmentManager
