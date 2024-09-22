@@ -13,8 +13,9 @@ import com.example.airytics.model.Daily
 import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
 import com.example.airytics.utilities.Functions
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 class DailyRecyclerAdapter :
     ListAdapter<Daily, DailyRecyclerAdapter.DailyViewHolder>(RecyclerDiffUtilDaily()) {
@@ -34,47 +35,47 @@ class DailyRecyclerAdapter :
     inner class DailyViewHolder(private val binding: ItemDaysBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(currentItem: Daily) {
-            Log.d("HASSAN", "onBind called for position: ${adapterPosition}")
-            Log.d("HASSAN", "Current Item: $currentItem")
+
             binding.apply {
+                val context = tvDayDays.context
+                val sharedPref = SettingSharedPref.getInstance(context)
+                val language = sharedPref.readStringFromSettingSP(Constants.LANGUAGE)
+
+                // Handle day format based on language
+                val dayTimestamp = convertDateStringToTimestamp(currentItem.day)
+                tvDayDays.text = if (language == Constants.ARABIC) {
+                    Functions.formatDayOfWeek(dayTimestamp, context, "ar")
+                } else {
+                    Functions.formatDayOfWeek(dayTimestamp, context, "en")
+                }
+
+                // Get localized weather description directly from API or based on a local list
                 tvStatusDays.text = currentItem.weatherDescription
 
+                // Parse temperature correctly based on locale
+                val numberFormat = NumberFormat.getInstance(Locale.getDefault())
+                val lowTemp = numberFormat.parse(currentItem.LowTemp.replace("°C", ""))?.toDouble() ?: 0.0
+                val highTemp = numberFormat.parse(currentItem.highTemp.replace("°C", ""))?.toDouble() ?: 0.0
 
-                val context = tvDayDays.context
-
-                val language = SettingSharedPref.getInstance(context).readStringFromSettingSP(Constants.LANGUAGE)
-                val dayTimestamp = convertDateStringToTimestamp(currentItem.day)
-                tvDayDays.text = Functions.formatDayOfWeek(dayTimestamp, context, language)
-                Log.d("HASSAN", "${tvDayDays.text}")
-
-                // Convert temperature from String to Double
-                val lowTemp = currentItem.LowTemp.replace("°C", "").toDoubleOrNull() ?: 0.0
-                val highTemp = currentItem.highTemp.replace("°C", "").toDoubleOrNull() ?: 0.0
-                Log.d("HASSAN", "LowTemp: $lowTemp, HighTemp: $highTemp")
-
-
-
-
-                val temperatureUnit = SettingSharedPref.getInstance(context).readStringFromSettingSP(Constants.TEMPERATURE)
-                when (temperatureUnit) {
-                    Constants.KELVIN -> tvDegreeDays.text = String.format(
+                // Handle temperature display based on user settings
+                val temperatureUnit = sharedPref.readStringFromSettingSP(Constants.TEMPERATURE)
+                tvDegreeDays.text = when (temperatureUnit) {
+                    Constants.KELVIN -> String.format(
                         "%.0f/%.0f°%s",
                         highTemp + 273.15, lowTemp + 273.15, context.getString(R.string.k)
                     )
-                    Constants.FAHRENHEIT -> tvDegreeDays.text = String.format(
+                    Constants.FAHRENHEIT -> String.format(
                         "%.0f/%.0f°%s",
-                        (highTemp - 273.15) * 9 / 5 + 32, (lowTemp - 273.15) * 9 / 5 + 32, context.getString(R.string.f)
+                        (highTemp * 9 / 5) + 32, (lowTemp * 9 / 5) + 32, context.getString(R.string.f)
                     )
-                    else -> tvDegreeDays.text = String.format(
+                    else -> String.format(
                         "%.0f/%.0f°%s",
                         highTemp, lowTemp, context.getString(R.string.c)
                     )
                 }
 
-                Functions.setIcon(
-                    currentItem.icon,
-                    ivIconDays
-                )
+                // Set weather icon
+                Functions.setIcon(currentItem.icon, ivIconDays)
             }
         }
     }
@@ -90,7 +91,7 @@ class DailyRecyclerAdapter :
     }
 }
 
-    class RecyclerDiffUtilDaily : DiffUtil.ItemCallback<Daily>() {
+class RecyclerDiffUtilDaily : DiffUtil.ItemCallback<Daily>() {
     override fun areItemsTheSame(oldItem: Daily, newItem: Daily): Boolean {
         return oldItem.day == newItem.day
     }

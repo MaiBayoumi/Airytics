@@ -7,7 +7,7 @@ data class ForecastItem(
     val clouds: Clouds,
     val wind: Wind,
     val visibility: Int,
-    val pop: Double,  // Probability of precipitation
+    val pop: Double,
     val sys: Sys,
     val dt_txt: String
 )

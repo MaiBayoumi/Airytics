@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Airytics</string>
+    <string name="home_title">الرئيسية</string>
+    <string name="favourite_title">المفضلة</string>
+    <string name="alert_title">التنبيه</string>
+    <string name="setting_title">الإعدادات</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location">الموقع</string>
+    <string name="day_details">17 SEP 24</string>
+    <string name="_28">28°</string>
+    <string name="sunny_day">مشمس</string>
+    <string name="sunrise">ص</string>
+    <string name="sunset">م</string>
+    <string name="percentage">%</string>
+    <string name="cloud">الغيوم</string>
+    <string name="_77">%</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="wind">الرياح</string>
+    <string name="windms">6 m/sec</string>
+    <string name="pressure">الضغط</string>
+    <string name="_1021_hpa">1015 hpa</string>
+    <string name="today">اليوم</string>
+    <string name="hour">4 PM</string>
+    <string name="day">يوم</string>
+    <string name="_23_13_c">23/13°C</string>
+    <string name="favplaces">الأماكن المفضلة</string>
+    <string name="gps">موقعك</string>
+    <string name="map">الخريطة</string>
+    <string name="wind_speed">سرعةالرياح</string>
+    <string name="meter_sec">m/sec</string>
+    <string name="mile_hour">ميل/الساعة</string>
+    <string name="language">اللغة</string>
+    <string name="english">الإنجليزية</string>
+    <string name="arabic">العربية</string>
+    <string name="notifications">الإشعارات</string>
+    <string name="enable">مفعل</string>
+    <string name="disable">غير مفعل</string>
+    <string name="temperature">درجة الحرارة</string>
+    <string name="celsius">درجة مئوية</string>
+    <string name="kelvin">كلفن</string>
+    <string name="fahrenheit">فهرنهايت</string>
+    <string name="clock">04:35 PM</string>
+    <string name="notification">الاشعارات</string>
+    <string name="overlay_permission_is_required_for_alert">اذن التنبيه مطلوب</string>
+    <string name="notification_permission">اذن الإشعارات مطلوب</string>
+    <string name="add_alert">أضف تنبيه</string>
+    <string name="tomo">غدًا</string>
+    <string name="k">ك</string>
+    <string name="f">ف</string>
+    <string name="c">م</string>
+    <string name="ok">موافق</string>
+    <string name="save_location">حفظ</string>
+    <string name="hpa">hpa</string>
+    <string name="searching">بحث</string>
+
+        <string-array name="countries">
+            <item>أفغانستان</item>
+            <item>ألبانيا</item>
+            <item>الجزائر</item>
+            <item>أندورا</item>
+            <item>أنغولا</item>
+            <item>أنتيغوا وباربودا</item>
+            <item>الأرجنتين</item>
+            <item>أرمينيا</item>
+            <item>أستراليا</item>
+            <item>النمسا</item>
+            <item>أذربيجان</item>
+            <item>الباهاماس</item>
+            <item>البحرين</item>
+            <item>بنغلاديش</item>
+            <item>بربادوس</item>
+            <item>بيلاروسيا</item>
+            <item>بلجيكا</item>
+            <item>بليز</item>
+            <item>بنين</item>
+            <item>بوتان</item>
+            <item>بوليفيا</item>
+            <item>البوسنة والهرسك</item>
+            <item>بوتسوانا</item>
+            <item>البرازيل</item>
+            <item>بروناي</item>
+            <item>بلغاريا</item>
+            <item>بوركينا فاسو</item>
+            <item>بوروندي</item>
+            <item>الرأس الأخضر</item>
+            <item>كمبوديا</item>
+            <item>الكاميرون</item>
+            <item>كندا</item>
+            <item>جمهورية أفريقيا الوسطى</item>
+            <item>تشاد</item>
+            <item>تشيلي</item>
+            <item>الصين</item>
+            <item>كولومبيا</item>
+            <item>جزر القمر</item>
+            <item>الكونغو (الكونغو برازافيل)</item>
+            <item>كوستاريكا</item>
+            <item>كرواتيا</item>
+            <item>كوبا</item>
+            <item>قبرص</item>
+            <item>التشيك</item>
+            <item>جمهورية الكونغو الديمقراطية</item>
+            <item>الدنمارك</item>
+            <item>جيبوتي</item>
+            <item>دومينيكا</item>
+            <item>جمهورية الدومينيكان</item>
+            <item>الإكوادور</item>
+            <item>مصر</item>
+            <item>السلفادور</item>
+            <item>غينيا الاستوائية</item>
+            <item>إريتريا</item>
+            <item>إستونيا</item>
+            <item>إسواتيني (سوازيلاند سابقًا)</item>
+            <item>إثيوبيا</item>
+            <item>فيجي</item>
+            <item>فنلندا</item>
+            <item>فرنسا</item>
+            <item>الغابون</item>
+            <item>غامبيا</item>
+            <item>جورجيا</item>
+            <item>ألمانيا</item>
+            <item>غانا</item>
+            <item>اليونان</item>
+            <item>غرينادا</item>
+            <item>غواتيمالا</item>
+            <item>غينيا</item>
+            <item>غينيا بيساو</item>
+            <item>غيانا</item>
+            <item>هايتي</item>
+            <item>هندوراس</item>
+            <item>المجر</item>
+            <item>أيسلندا</item>
+            <item>الهند</item>
+            <item>إندونيسيا</item>
+            <item>إيران</item>
+            <item>العراق</item>
+            <item>أيرلندا</item>
+            <item>إسرائيل</item>
+            <item>إيطاليا</item>
+            <item>ساحل العاج</item>
+            <item>جامايكا</item>
+            <item>اليابان</item>
+            <item>الأردن</item>
+            <item>كازاخستان</item>
+            <item>كينيا</item>
+            <item>كيريباس</item>
+            <item>الكويت</item>
+            <item>قيرغيزستان</item>
+            <item>لاوس</item>
+            <item>لاتفيا</item>
+            <item>لبنان</item>
+            <item>ليسوتو</item>
+            <item>ليبيريا</item>
+            <item>ليبيا</item>
+            <item>ليختنشتاين</item>
+            <item>ليتوانيا</item>
+            <item>لوكسمبورغ</item>
+            <item>مدغشقر</item>
+            <item>مالاوي</item>
+            <item>ماليزيا</item>
+            <item>المالديف</item>
+            <item>مالي</item>
+            <item>مالطا</item>
+            <item>جزر مارشال</item>
+            <item>موريتانيا</item>
+            <item>موريشيوس</item>
+            <item>المكسيك</item>
+            <item>ميكرونيزيا</item>
+            <item>مولدوفا</item>
+            <item>موناكو</item>
+            <item>منغوليا</item>
+            <item>الجبل الأسود</item>
+            <item>المغرب</item>
+            <item>موزمبيق</item>
+            <item>ميانمار (بورما سابقًا)</item>
+            <item>ناميبيا</item>
+            <item>ناورو</item>
+            <item>نيبال</item>
+            <item>هولندا</item>
+            <item>نيوزيلندا</item>
+            <item>نيكاراغوا</item>
+            <item>النيجر</item>
+            <item>نيجيريا</item>
+            <item>كوريا الشمالية</item>
+            <item>مقدونيا الشمالية</item>
+            <item>النرويج</item>
+            <item>عمان</item>
+            <item>باكستان</item>
+            <item>بالاو</item>
+            <item>بنما</item>
+            <item>بابوا غينيا الجديدة</item>
+            <item>باراغواي</item>
+            <item>بيرو</item>
+            <item>الفلبين</item>
+            <item>بولندا</item>
+            <item>البرتغال</item>
+            <item>قطر</item>
+            <item>رومانيا</item>
+            <item>روسيا</item>
+            <item>رواندا</item>
+            <item>سانت كيتس ونيفيس</item>
+            <item>سانت لوسيا</item>
+            <item>سانت فينسنت والغرينادين</item>
+            <item>ساموا</item>
+            <item>سان مارينو</item>
+            <item>ساو تومي وبرينسيب</item>
+            <item>السعودية</item>
+            <item>السنغال</item>
+            <item>صربيا</item>
+            <item>سيشل</item>
+            <item>سيراليون</item>
+            <item>سنغافورة</item>
+            <item>سلوفاكيا</item>
+            <item>سلوفينيا</item>
+            <item>جزر سليمان</item>
+            <item>الصومال</item>
+            <item>جنوب أفريقيا</item>
+            <item>كوريا الجنوبية</item>
+            <item>جنوب السودان</item>
+            <item>إسبانيا</item>
+            <item>سريلانكا</item>
+            <item>السودان</item>
+            <item>سورينام</item>
+            <item>السويد</item>
+            <item>سويسرا</item>
+            <item>سوريا</item>
+            <item>تايوان</item>
+            <item>طاجيكستان</item>
+            <item>تنزانيا</item>
+            <item>تايلاند</item>
+            <item>تيمور الشرقية</item>
+            <item>توغو</item>
+            <item>تونغا</item>
+            <item>ترينيداد وتوباغو</item>
+            <item>تونس</item>
+            <item>تركيا</item>
+            <item>تركمانستان</item>
+            <item>توفالو</item>
+            <item>أوغندا</item>
+            <item>أوكرانيا</item>
+            <item>الإمارات العربية المتحدة</item>
+            <item>المملكة المتحدة</item>
+            <item>الولايات المتحدة</item>
+            <item>أوروغواي</item>
+            <item>أوزبكستان</item>
+            <item>فانواتو</item>
+            <item>الفاتيكان</item>
+            <item>فنزويلا</item>
+            <item>فيتنام</item>
+            <item>اليمن</item>
+            <item>زامبيا</item>
+            <item>زيمبابوي</item>
+        </string-array>
+
+
+</resources>

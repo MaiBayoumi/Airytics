@@ -83,7 +83,6 @@ class HomeFragment : Fragment() {
                         }
                         is ForecastState.Success -> {
                             val dailyList = parseForecastResponse(foreCastStateVar.weatherForecast)
-                            Log.d("HASSAN", "$dailyList")
                             withContext(Dispatchers.Main){
                                 dailyRecyclerAdapter.submitList(dailyList) // Update adapter with daily data
                                 binding.loadingLottie.visibility = View.GONE
@@ -177,9 +176,9 @@ class HomeFragment : Fragment() {
 
             val temperatureUnit = sharedViewModel.readStringFromSettingSP(Constants.TEMPERATURE)
             val temperature = when (temperatureUnit) {
-                Constants.KELVIN -> String.format("%.1f°K", weatherResponse.main.temp) // Kelvin is default
-                Constants.FAHRENHEIT -> String.format("%.1f°F", (weatherResponse.main.temp - 273.15) * 9 / 5 + 32) // Convert from Kelvin to Fahrenheit
-                else -> String.format("%.1f°C", weatherResponse.main.temp - 273.15) // Convert from Kelvin to Celsius
+                Constants.KELVIN -> String.format("%.1f°K", weatherResponse.main.temp)
+                Constants.FAHRENHEIT -> String.format("%.1f°F", (weatherResponse.main.temp - 273.15) * 9 / 5 + 32)
+                else -> String.format("%.1f°C", weatherResponse.main.temp - 273.15)
             }
             tvCurrentDegree.text = temperature
 
@@ -197,15 +196,13 @@ class HomeFragment : Fragment() {
 
     private fun parseForecastResponse(response: WeatherForecastResponse): List<Daily> {
         val dailyList = mutableListOf<Daily>()
-        val dayGroups = response.list.groupBy { forecast ->
-            forecast.dt_txt.substring(0, 10)
-        }.values.take(5)
+        val dayGroups = response.list.groupBy { forecast -> forecast.dt_txt.substring(0, 10) }.values.take(5)
 
         for (dayGroup in dayGroups) {
             val firstEntry = dayGroup.first()
             val day = firstEntry.dt_txt.substring(0, 10)
-            val weatherDescription = firstEntry.weather[0].description.capitalize()
-            val weatherIcon = firstEntry.weather[0].icon // Get the weather icon code
+            val weatherDescription = firstEntry.weather[0].description.capitalize() // Should now be in the correct language
+            val weatherIcon = firstEntry.weather[0].icon
 
             val temperatureUnit = sharedViewModel.readStringFromSettingSP(Constants.TEMPERATURE)
 
@@ -226,6 +223,7 @@ class HomeFragment : Fragment() {
 
         return dailyList
     }
+
 
     private fun makeViewsVisible() {
         binding.apply {

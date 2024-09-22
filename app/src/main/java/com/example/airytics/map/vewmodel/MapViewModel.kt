@@ -1,12 +1,7 @@
-package com.example.airytics.map.vewmodel
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.airytics.model.Place
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MapViewModel : ViewModel() {
@@ -20,10 +15,10 @@ class MapViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             searchQuery
-                .debounce(300)
-                .filterNotNull() // Ignore empty searches
+                .debounce(300) // Debounce to limit frequent updates
+                .filter { it.isNotEmpty() } // Ignore empty searches
                 .collect { query ->
-                    fetchLocations(query)
+                    //fetchLocations(query)
                 }
         }
     }
@@ -34,18 +29,12 @@ class MapViewModel : ViewModel() {
         }
     }
 
-    private suspend fun fetchLocations(query: String) {
+//    private suspend fun fetchLocations(query: String) {
+//        val results = performLocationSearch(query) // Call your API
+//        _filteredLocations.value = results
+//    }
 
-        val results = performLocationSearch(query) // Call your API
-        _filteredLocations.value = results
-    }
-
-    private suspend fun performLocationSearch(query: String): List<Place> {
-
-        return listOf(
-            Place(1, "city1", 0.0, 0.0),
-            Place(2, "city2", 1.0, 1.0)
-
-        )
-    }
+//    private suspend fun performLocationSearch(query: String): List<Place> {
+//        return null
+//    }
 }
