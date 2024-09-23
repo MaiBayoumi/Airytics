@@ -35,9 +35,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
@@ -146,13 +148,18 @@ class MapFragment : Fragment() {
     }
 
     private fun placeMarkerOnMap(latLng: LatLng) {
-        coordinate = Coordinate(latLng.latitude, latLng.longitude) // Set the coordinate
-        marker?.remove() // Remove existing marker
-        marker = googleMap.addMarker(
-            MarkerOptions().position(latLng)
-        )
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f)) // Zoom to the location
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                coordinate = Coordinate(latLng.latitude, latLng.longitude) // Set the coordinate
+                marker?.remove() // Remove existing marker
+                marker = googleMap.addMarker(
+                    MarkerOptions().position(latLng)
+                )
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+            }
+        }
     }
+
 
 
 
