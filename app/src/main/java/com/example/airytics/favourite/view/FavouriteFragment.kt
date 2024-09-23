@@ -85,14 +85,12 @@ class FavouriteFragment : Fragment() {
 
                 mediaPlayer.setOnCompletionListener { mp -> mp.release() }
 
-                // Delete the item
                 favouriteViewModel.deletePlaceFromFav(place)
 
-                // Show the Snackbar with an undo option
                 val snackbar = Snackbar.make(binding.root, "Location deleted", Snackbar.LENGTH_LONG)
                 snackbar.setAction("Undo") {
                     favouriteViewModel.insertPlaceToFav(place)
-                    favouriteViewModel.getAllFavouritePlaces() // Refresh the list to get the updated data
+                    favouriteViewModel.getAllFavouritePlaces()
                 }
 
                 snackbar.show()
