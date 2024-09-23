@@ -35,8 +35,8 @@ interface FavouriteDao {
     fun getCashedData(): Flow<WeatherResponse>
 
 
-//    @Query("SELECT * FROM WeatherForecastResponse")
-//    fun getCashedDataForecast(): Flow<WeatherForecastResponse>
+    @Query("SELECT * FROM WeatherForecastResponse")
+    fun getCashedDataForecast(): Flow<WeatherForecastResponse>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAlarm(alarmItem: AlarmItem)

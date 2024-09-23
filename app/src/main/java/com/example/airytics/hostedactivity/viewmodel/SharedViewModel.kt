@@ -74,6 +74,7 @@ class SharedViewModel(
             }
         } else {
             getCachedData()
+            getCachedDataForecast()
         }
     }
 
@@ -106,7 +107,7 @@ class SharedViewModel(
                         _weatherResponseMutableForecastStateFlow.value= weatherResponseForeList
                     }
             }catch (e:Exception){
-                //repo.getCashedDataForecast()
+                repo.getCashedDataForecast()
             }
 
         }
@@ -140,6 +141,19 @@ class SharedViewModel(
                     _weatherResponseMutableStateFlow.value = ApiState.Success(cachedWeather)
                 } catch (exception: Exception) {
                     _weatherResponseMutableStateFlow.value = ApiState.Failure("Failed to load cached data")
+                }
+            }
+        }
+
+    }
+
+    fun getCachedDataForecast() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getCashedDataForecast()?.collect { cachedWeather ->
+                try {
+                    _weatherResponseMutableForecastStateFlow.value = ForecastState.Success(cachedWeather)
+                } catch (exception: Exception) {
+                    _weatherResponseMutableForecastStateFlow.value = ForecastState.Failure("Failed to load cached data")
                 }
             }
         }

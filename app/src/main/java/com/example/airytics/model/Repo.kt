@@ -102,9 +102,9 @@ class Repo private constructor(
         return localSource.getCashedData()
     }
 
-//    override fun getCashedDataForecast(): Flow<WeatherForecastResponse>? {
-//        return localSource.getCashedDataForecast()
-//    }
+    override fun getCashedDataForecast(): Flow<WeatherForecastResponse>? {
+        return localSource.getCashedDataForecast()
+    }
 
     override suspend fun insertAlarm(alarmItem: AlarmItem) {
         localSource.insertAlarm(alarmItem)

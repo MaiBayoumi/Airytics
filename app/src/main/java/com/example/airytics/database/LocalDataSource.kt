@@ -50,9 +50,9 @@ class LocalDataSource private constructor(context: Context): LocalDataSourceInte
         return favouriteDao.getCashedData()
     }
 
-//    override fun getCashedDataForecast(): Flow<WeatherForecastResponse>? {
-//        return  favouriteDao.getCashedDataForecast()
-//    }
+    override fun getCashedDataForecast(): Flow<WeatherForecastResponse>? {
+        return  favouriteDao.getCashedDataForecast()
+    }
 
     override suspend fun insertAlarm(alarmItem: AlarmItem) {
         favouriteDao.insertAlarm(alarmItem)

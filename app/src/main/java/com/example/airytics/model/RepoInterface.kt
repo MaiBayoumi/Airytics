@@ -30,7 +30,7 @@ interface RepoInterface {
 
     fun getCashedData(): Flow<WeatherResponse>?
 
-    //fun getCashedDataForecast(): Flow<WeatherForecastResponse>?
+    fun getCashedDataForecast(): Flow<WeatherForecastResponse>?
 
     fun writeStringToSettingSP(key: String, value: String)
 

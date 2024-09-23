@@ -101,7 +101,7 @@ class Converters {
 
     @TypeConverter
     fun toForecastCity(value: String?): City{
-        val listType = object : TypeToken<List<ForecastItem>>() {}.type
+        val listType = object : TypeToken<City>() {}.type
         return Gson().fromJson(value, listType)
     }
 
