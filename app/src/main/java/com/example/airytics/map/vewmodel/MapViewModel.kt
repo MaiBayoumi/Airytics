@@ -1,4 +1,5 @@
 import android.content.Context
+import android.location.Geocoder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.airytics.R
@@ -35,13 +36,25 @@ class MapViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    private suspend fun fetchLocations(query: String) {
+    private  fun fetchLocations(query: String) {
         val results = performLocationSearch(query)
         _filteredLocations.value = results
     }
 
-    private suspend fun performLocationSearch(query: String): List<Place> {
+    private  fun performLocationSearch(query: String): List<Place> {
+        val geocoder = Geocoder(context)
         return countries.filter { it.contains(query, ignoreCase = true) }
-            .map { Place(1,cityName= it,0.0,0.0) }
+            .mapNotNull { countryName ->
+                // Safely call getFromLocationName and handle null results
+                val addresses = geocoder.getFromLocationName(countryName, 1) ?: return@mapNotNull null
+                addresses.firstOrNull()?.let {
+                    Place(
+                        cityName = it.locality ?: it.adminArea ?: countryName,
+                        latitude = it.latitude,
+                        longitude = it.longitude
+                    )
+                }
+            }
     }
+
 }

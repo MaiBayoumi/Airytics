@@ -27,11 +27,16 @@ import com.example.airytics.model.Repo
 import com.example.airytics.network.RemoteDataSource
 import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MapFragment : Fragment() {
@@ -40,6 +45,7 @@ class MapFragment : Fragment() {
     private var coordinate: Coordinate? = null
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var mapViewModel: MapViewModel
+    private lateinit var googleMap: GoogleMap
 
     override fun onStart() {
         super.onStart()
@@ -57,7 +63,14 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        googleMapHandler()
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = googleApiAvailability.isGooglePlayServicesAvailable(requireContext())
+        if (resultCode != ConnectionResult.SUCCESS) {
+            googleApiAvailability.getErrorDialog(requireActivity(), resultCode, 0)?.show()
+        } else {
+            // Initialize your map or perform actions that require Google Play services
+            googleMapHandler()
+        }
 
         // Initialize ViewModel
         val factory = SharedViewModelFactory(
@@ -69,10 +82,13 @@ class MapFragment : Fragment() {
                 SettingSharedPref.getInstance(requireContext())
             )
         )
-        sharedViewModel = ViewModelProvider(requireActivity(), factory)[SharedViewModel::class.java]
 
-        // Set up the search view
-        //setupSearchView()
+
+        sharedViewModel = ViewModelProvider(requireActivity(), factory)[SharedViewModel::class.java]
+        val mapFactory = MapViewModelFactory(requireContext())
+        mapViewModel = ViewModelProvider(this, mapFactory)[MapViewModel::class.java]
+
+        setupSearchView()
 
         // Save location button handler
         binding.btnSaveLocation.setOnClickListener {
@@ -99,10 +115,11 @@ class MapFragment : Fragment() {
         val supportMapFragment: SupportMapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         supportMapFragment.getMapAsync { map ->
+            googleMap = map
             map.setOnMapClickListener { location ->
                 marker?.remove()
                 coordinate = Coordinate(location.latitude, location.longitude)
-                marker = map.addMarker(
+                marker = googleMap.addMarker(
                     MarkerOptions()
                         .position(location)
                 )
@@ -110,29 +127,34 @@ class MapFragment : Fragment() {
         }
     }
 
+
     private fun setupSearchView() {
-//        binding.etSearch.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                mapViewModel.search(s.toString())
-//            }
-//
-//            override fun afterTextChanged(s: Editable?) {}
-//        })
-//
-//        lifecycleScope.launch {
-//            mapViewModel.filteredLocations.collect { places ->
-//                marker?.remove()
-//                places.forEach { place ->
-//                    marker = map.addMarker(
-//                        MarkerOptions().position(LatLng(place.latitude, place.longitude))
-//                }
-//            }
-//        }
+        binding.etSearch.addTextChangedListener { text ->
+            val query = text.toString()
+            mapViewModel.search(query)
 
-
+            lifecycleScope.launch {
+                mapViewModel.filteredLocations.collect { places ->
+                    if (places.isNotEmpty()) {
+                        val firstPlace = places.first()
+                        val latLng = LatLng(firstPlace.latitude, firstPlace.longitude)
+                        placeMarkerOnMap(latLng) // Place the marker on the first result
+                    }
+                }
+            }
+        }
     }
+
+    private fun placeMarkerOnMap(latLng: LatLng) {
+        coordinate = Coordinate(latLng.latitude, latLng.longitude) // Set the coordinate
+        marker?.remove() // Remove existing marker
+        marker = googleMap.addMarker(
+            MarkerOptions().position(latLng)
+        )
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f)) // Zoom to the location
+    }
+
+
 
 
     private fun handleLocationSave(kind: String?) {
