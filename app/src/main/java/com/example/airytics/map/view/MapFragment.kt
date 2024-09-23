@@ -3,6 +3,8 @@ package com.example.airytics.map.view
 import MapViewModel
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
@@ -131,21 +133,37 @@ class MapFragment : Fragment() {
 
 
     private fun setupSearchView() {
+        val debounceTime = 300L // Set debounce time in milliseconds
+        var lastQuery: String? = null
+        val handler = Handler(Looper.getMainLooper())
+
         binding.etSearch.addTextChangedListener { text ->
             val query = text.toString()
-            mapViewModel.search(query)
+            lastQuery = query
 
-            lifecycleScope.launch {
-                mapViewModel.filteredLocations.collect { places ->
-                    if (places.isNotEmpty()) {
-                        val firstPlace = places.first()
-                        val latLng = LatLng(firstPlace.latitude, firstPlace.longitude)
-                        placeMarkerOnMap(latLng) // Place the marker on the first result
-                    }
+            // Clear previous callbacks
+            handler.removeCallbacksAndMessages(null)
+
+            // Post a delayed runnable for debouncing
+            handler.postDelayed({
+                if (query == lastQuery) { // Ensure the query hasn't changed
+                    mapViewModel.search(query)
+                }
+            }, debounceTime)
+        }
+
+        // Collect filtered locations
+        lifecycleScope.launch {
+            mapViewModel.filteredLocations.collect { places ->
+                if (places.isNotEmpty()) {
+                    val firstPlace = places.first()
+                    val latLng = LatLng(firstPlace.latitude, firstPlace.longitude)
+                    placeMarkerOnMap(latLng) // Place the marker on the first result
                 }
             }
         }
     }
+
 
     private fun placeMarkerOnMap(latLng: LatLng) {
         lifecycleScope.launch {

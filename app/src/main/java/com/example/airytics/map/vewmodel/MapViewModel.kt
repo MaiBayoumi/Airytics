@@ -22,9 +22,9 @@ class MapViewModel(private val context: Context) : ViewModel() {
     init {
         viewModelScope.launch {
             searchQuery
-                .debounce(300) // Debounce to limit frequent updates
-                .filter { it.isNotEmpty() } // Ignore empty searches
-                .collect { query ->
+                .debounce(200) // Debounce to limit frequent updates
+                .filter { it.isNotEmpty() }
+                .collectLatest { query ->
                     fetchLocations(query)
                 }
         }
