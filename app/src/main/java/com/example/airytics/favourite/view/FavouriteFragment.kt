@@ -83,20 +83,23 @@ class FavouriteFragment : Fragment() {
                 val mediaPlayer = MediaPlayer.create(context, R.raw.delete)
                 mediaPlayer.start()
 
-                mediaPlayer.setOnCompletionListener { mp ->
-                    mp.release()
-                }
+                mediaPlayer.setOnCompletionListener { mp -> mp.release() }
+
+                // Delete the item
                 favouriteViewModel.deletePlaceFromFav(place)
-                Snackbar.make(view, "deleting Location.... ", Snackbar.LENGTH_LONG).apply {
-                    setAction("Undo") {
-                        favouriteViewModel.insertPlaceToFav(place)
-                    }
-                    show()
+
+                // Show the Snackbar with an undo option
+                val snackbar = Snackbar.make(binding.root, "Location deleted", Snackbar.LENGTH_LONG)
+                snackbar.setAction("Undo") {
+                    favouriteViewModel.insertPlaceToFav(place)
+                    favouriteRecyclerAdapter.notifyItemInserted(position) // Refresh the RecyclerView
                 }
+
+                snackbar.show()
             }
         }
 
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
+            val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
         itemTouchHelper.attachToRecyclerView(binding.rvFavourite)
 
         favouriteRecyclerAdapter = FavouriteRecyclerAdapter {
