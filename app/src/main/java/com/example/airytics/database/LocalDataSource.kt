@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.pojo.AlarmItem
 import com.example.airytics.model.Place
+import com.example.airytics.model.WeatherForecastResponse
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource private constructor(context: Context): LocalDataSourceInterface {
@@ -37,6 +38,10 @@ class LocalDataSource private constructor(context: Context): LocalDataSourceInte
         favouriteDao.insertCashedData(weatherResponse)
     }
 
+    override suspend fun insertCashedDataForcast(weatherForecastResponse: WeatherForecastResponse) {
+        favouriteDao.insertCashedDataForcast(weatherForecastResponse)
+    }
+
     override suspend fun deleteCashedData() {
         favouriteDao.deleteCashedData()
     }
@@ -44,6 +49,10 @@ class LocalDataSource private constructor(context: Context): LocalDataSourceInte
     override fun getCashedData(): Flow<WeatherResponse> {
         return favouriteDao.getCashedData()
     }
+
+//    override fun getCashedDataForecast(): Flow<WeatherForecastResponse>? {
+//        return  favouriteDao.getCashedDataForecast()
+//    }
 
     override suspend fun insertAlarm(alarmItem: AlarmItem) {
         favouriteDao.insertAlarm(alarmItem)

@@ -49,13 +49,16 @@ class DailyRecyclerAdapter :
                     Functions.formatDayOfWeek(dayTimestamp, context, "en")
                 }
 
-                // Get localized weather description directly from API or based on a local list
-                tvStatusDays.text = currentItem.weatherDescription
+                tvStatusDays.text =
+                    getLocalizedWeatherDescription(currentItem.weatherDescription, language)
+
 
                 // Parse temperature correctly based on locale
                 val numberFormat = NumberFormat.getInstance(Locale.getDefault())
-                val lowTemp = numberFormat.parse(currentItem.LowTemp.replace("°C", ""))?.toDouble() ?: 0.0
-                val highTemp = numberFormat.parse(currentItem.highTemp.replace("°C", ""))?.toDouble() ?: 0.0
+                val lowTemp =
+                    numberFormat.parse(currentItem.LowTemp.replace("°C", ""))?.toDouble() ?: 0.0
+                val highTemp =
+                    numberFormat.parse(currentItem.highTemp.replace("°C", ""))?.toDouble() ?: 0.0
 
                 // Handle temperature display based on user settings
                 val temperatureUnit = sharedPref.readStringFromSettingSP(Constants.TEMPERATURE)
@@ -64,10 +67,14 @@ class DailyRecyclerAdapter :
                         "%.0f/%.0f°%s",
                         highTemp + 273.15, lowTemp + 273.15, context.getString(R.string.k)
                     )
+
                     Constants.FAHRENHEIT -> String.format(
                         "%.0f/%.0f°%s",
-                        (highTemp * 9 / 5) + 32, (lowTemp * 9 / 5) + 32, context.getString(R.string.f)
+                        (highTemp * 9 / 5) + 32,
+                        (lowTemp * 9 / 5) + 32,
+                        context.getString(R.string.f)
                     )
+
                     else -> String.format(
                         "%.0f/%.0f°%s",
                         highTemp, lowTemp, context.getString(R.string.c)
@@ -78,25 +85,59 @@ class DailyRecyclerAdapter :
                 Functions.setIcon(currentItem.icon, ivIconDays)
             }
         }
-    }
 
-    private fun convertDateStringToTimestamp(dateString: String): Long {
-        return try {
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val date = sdf.parse(dateString)
-            date?.time?.div(1000) ?: 0L // Convert milliseconds to seconds
-        } catch (e: Exception) {
-            0L // Return 0 or handle error as needed
+        private fun getLocalizedWeatherDescription(description: String, language: String): String {
+            return if (language == Constants.ARABIC) {
+                when (description.lowercase()) {
+                    "clear sky" -> "سماء صافية"
+                    "few clouds" -> "غيوم قليلة"
+                    "scattered clouds" -> "غيوم متناثرة"
+                    "broken clouds" -> "غيوم متقطعة"
+                    "shower rain" -> "أمطار متفرقة"
+                    "rain" -> "مطر"
+                    "thunderstorm" -> "عاصفة رعدية"
+                    "snow" -> "ثلج"
+                    "mist" -> "ضباب"
+                    "smoke" -> "دخان"
+                    "haze" -> "ضباب خفيف"
+                    "dust" -> "غبار"
+                    "sand" -> "رمال"
+                    "fog" -> "ضباب كثيف"
+                    "tornado" -> "اعصار"
+                    "tropical storm" -> "عاصفة مدارية"
+                    "hurricane" -> "إعصار"
+                    "light rain" -> "مطر خفيف"
+                    "heavy rain" -> "مطر غزير"
+                    "light snow" -> "ثلوج خفيفة"
+                    "heavy snow" -> "ثلوج غزيرة"
+                    "drizzle" -> "رذاذ"
+                    "freezing rain" -> "مطر متجمد"
+                    else -> "غير معروف"
+                }
+            } else {
+                description
+            }
+        }
+
+
+        private fun convertDateStringToTimestamp(dateString: String): Long {
+            return try {
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = sdf.parse(dateString)
+                date?.time?.div(1000) ?: 0L // Convert milliseconds to seconds
+            } catch (e: Exception) {
+                0L
+            }
         }
     }
-}
 
-class RecyclerDiffUtilDaily : DiffUtil.ItemCallback<Daily>() {
-    override fun areItemsTheSame(oldItem: Daily, newItem: Daily): Boolean {
-        return oldItem.day == newItem.day
-    }
+    class RecyclerDiffUtilDaily : DiffUtil.ItemCallback<Daily>() {
+        override fun areItemsTheSame(oldItem: Daily, newItem: Daily): Boolean {
+            return oldItem.day == newItem.day
+        }
 
-    override fun areContentsTheSame(oldItem: Daily, newItem: Daily): Boolean {
-        return oldItem == newItem
+        override fun areContentsTheSame(oldItem: Daily, newItem: Daily): Boolean {
+            return oldItem == newItem
+        }
     }
 }

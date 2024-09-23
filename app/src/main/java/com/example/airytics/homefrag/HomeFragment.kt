@@ -70,27 +70,36 @@ class HomeFragment : Fragment() {
 
 
         lifecycleScope.launch(Dispatchers.IO) {
-            launch(Dispatchers.IO){
-                sharedViewModel.weatherResponseForeStateFlow.collect{foreCastStateVar->
-                    when(foreCastStateVar){
+            launch(Dispatchers.IO) {
+                sharedViewModel.weatherResponseForeStateFlow.collect { foreCastStateVar ->
+                    when (foreCastStateVar) {
                         is ForecastState.Failure -> {
-                            Toast.makeText(
-                                requireContext(), foreCastStateVar.errorMessage,Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        com.example.airytics.network.ForecastState.Loading -> {
-                            binding.loadingLottie.visibility = View.VISIBLE
-                        }
-                        is ForecastState.Success -> {
-                            val dailyList = parseForecastResponse(foreCastStateVar.weatherForecast)
-                            withContext(Dispatchers.Main){
-                                dailyRecyclerAdapter.submitList(dailyList) // Update adapter with daily data
-                                binding.loadingLottie.visibility = View.GONE
+                            withContext(Dispatchers.Main) {  // Ensure Toast is shown on the main thread
+                                Toast.makeText(
+                                    requireContext(),
+                                    foreCastStateVar.errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
 
                         }
-                    }
 
+                        com.example.airytics.network.ForecastState.Loading -> {
+                            withContext(Dispatchers.Main) {
+                                binding.loadingLottie.visibility = View.VISIBLE
+                            }
+                        }
+
+                        is ForecastState.Success -> {
+                            val dailyList =
+                                sharedViewModel.parseForecastResponse(foreCastStateVar.weatherForecast)
+                            withContext(Dispatchers.Main) {
+                                dailyRecyclerAdapter.submitList(dailyList)
+                                binding.loadingLottie.visibility = View.GONE
+                            }
+                            insertCashedDataForecast(foreCastStateVar.weatherForecast)
+                        }
+                    }
                 }
             }
             launch{
@@ -134,7 +143,7 @@ class HomeFragment : Fragment() {
                 binding.prProgress.visibility = View.VISIBLE
                 sharedViewModel.writeStringToSettingSP(
                     Constants.LOCATION,
-                    Constants.GPS
+                    Constants.GPS,
                 )
                 sharedViewModel.getLocation(view.context)
                 binding.ivNearMe.visibility = View.GONE
@@ -163,6 +172,7 @@ class HomeFragment : Fragment() {
         binding.apply {
             tvLocationName.text = Functions.setLocationNameByGeoCoder(weatherResponse, requireContext())
 
+
             tvWeatherStatus.text = weatherResponse.weather[0].description.capitalize()
 
             tvDynamicPressure.text = String.format("%d %s", weatherResponse.main.pressure, getString(R.string.hpa))
@@ -176,11 +186,13 @@ class HomeFragment : Fragment() {
 
             val temperatureUnit = sharedViewModel.readStringFromSettingSP(Constants.TEMPERATURE)
             val temperature = when (temperatureUnit) {
-                Constants.KELVIN -> String.format("%.1f°K", weatherResponse.main.temp)
-                Constants.FAHRENHEIT -> String.format("%.1f°F", (weatherResponse.main.temp - 273.15) * 9 / 5 + 32)
-                else -> String.format("%.1f°C", weatherResponse.main.temp - 273.15)
+                Constants.KELVIN -> String.format("%.1f°%s", weatherResponse.main.temp, getString(R.string.k))
+                Constants.FAHRENHEIT -> String.format("%.1f°%s", (weatherResponse.main.temp - 273.15) * 9 / 5 + 32, getString(R.string.f))
+                else -> String.format("%.1f°%s", weatherResponse.main.temp - 273.15, getString(R.string.c))
             }
             tvCurrentDegree.text = temperature
+
+
 
             val windSpeedUnit = sharedViewModel.readStringFromSettingSP(Constants.WIND_SPEED)
             val windSpeed = when (windSpeedUnit) {
@@ -192,36 +204,6 @@ class HomeFragment : Fragment() {
         }
         iconAnimation()
 
-    }
-
-    private fun parseForecastResponse(response: WeatherForecastResponse): List<Daily> {
-        val dailyList = mutableListOf<Daily>()
-        val dayGroups = response.list.groupBy { forecast -> forecast.dt_txt.substring(0, 10) }.values.take(5)
-
-        for (dayGroup in dayGroups) {
-            val firstEntry = dayGroup.first()
-            val day = firstEntry.dt_txt.substring(0, 10)
-            val weatherDescription = firstEntry.weather[0].description.capitalize() // Should now be in the correct language
-            val weatherIcon = firstEntry.weather[0].icon
-
-            val temperatureUnit = sharedViewModel.readStringFromSettingSP(Constants.TEMPERATURE)
-
-            val lowTemp = when (temperatureUnit) {
-                Constants.KELVIN -> String.format("%.1f°K", dayGroup.minOf { it.main.temp_min })
-                Constants.FAHRENHEIT -> String.format("%.1f°F", (dayGroup.minOf { it.main.temp_min } - 273.15) * 9 / 5 + 32)
-                else -> String.format("%.1f°C", dayGroup.minOf { it.main.temp_min } - 273.15)
-            }
-
-            val highTemp = when (temperatureUnit) {
-                Constants.KELVIN -> String.format("%.1f°K", dayGroup.maxOf { it.main.temp_max })
-                Constants.FAHRENHEIT -> String.format("%.1f°F", (dayGroup.maxOf { it.main.temp_max } - 273.15) * 9 / 5 + 32)
-                else -> String.format("%.1f°C", dayGroup.maxOf { it.main.temp_max } - 273.15)
-            }
-
-            dailyList.add(Daily(day, weatherDescription, lowTemp, highTemp, weatherIcon))
-        }
-
-        return dailyList
     }
 
 
@@ -248,6 +230,12 @@ class HomeFragment : Fragment() {
     private fun insertCashedData(weatherResponse: WeatherResponse){
         if (sharedViewModel.checkConnection(requireContext())) {
             sharedViewModel.insertCachedData(weatherResponse)
+        }
+    }
+
+    private fun insertCashedDataForecast(weatherForecastResponse: WeatherForecastResponse){
+        if (sharedViewModel.checkConnection(requireContext())) {
+            sharedViewModel.insertCachedDataForecast(weatherForecastResponse)
         }
     }
 }

@@ -27,6 +27,7 @@ class SharedViewModel(
 ) : ViewModel() {
     init {
         getForecastData(Coordinate(0.0,0.0),"en")
+
     }
 
     private val _locationStatusMutableStateFlow: MutableStateFlow<String> = MutableStateFlow("")
@@ -78,6 +79,8 @@ class SharedViewModel(
 
     fun getWeatherData(coordinate: Coordinate, language: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            try {
+
                 repo.getWeatherResponse(coordinate, language)
                     .catch { exception ->
                         _weatherResponseMutableStateFlow.value = ApiState.Failure(exception.message ?: "Unknown error occurred")
@@ -89,15 +92,23 @@ class SharedViewModel(
                             _weatherResponseMutableStateFlow.value = ApiState.Failure(weatherResponse.message())
                         }
                     }
+            }catch (e:Exception){
+                repo.getCashedData()
+            }
         }
     }
 
     fun getForecastData(coordinate: Coordinate,language: String){
         viewModelScope.launch (Dispatchers.IO ){
-            repo.getWeatherForecast(coordinate,language)
-                .collectLatest { weatherResponseForeList ->
-                    _weatherResponseMutableForecastStateFlow.value= weatherResponseForeList
-                }
+            try{
+                repo.getWeatherForecast(coordinate,language)
+                    .collectLatest { weatherResponseForeList ->
+                        _weatherResponseMutableForecastStateFlow.value= weatherResponseForeList
+                    }
+            }catch (e:Exception){
+                //repo.getCashedDataForecast()
+            }
+
         }
     }
 
@@ -111,10 +122,18 @@ class SharedViewModel(
     fun insertCachedData(weatherResponse: WeatherResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.insertCashedData(weatherResponse)
+
         }
     }
 
-    private fun getCachedData() {
+    fun insertCachedDataForecast(weatherForecastResponse: WeatherForecastResponse) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.insertCashedDataForecast(weatherForecastResponse)
+
+        }
+    }
+
+     fun getCachedData() {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getCashedData()?.collect { cachedWeather ->
                 try {
@@ -124,6 +143,37 @@ class SharedViewModel(
                 }
             }
         }
+
+    }
+
+     fun parseForecastResponse(response: WeatherForecastResponse): List<Daily> {
+        val dailyList = mutableListOf<Daily>()
+        val dayGroups = response.list.groupBy { forecast -> forecast.dt_txt.substring(0, 10) }.values.take(5)
+
+        for (dayGroup in dayGroups) {
+            val firstEntry = dayGroup.first()
+            val day = firstEntry.dt_txt.substring(0, 10)
+            val weatherDescription = firstEntry.weather[0].description.capitalize() // Should now be in the correct language
+            val weatherIcon = firstEntry.weather[0].icon
+
+            val temperatureUnit = readStringFromSettingSP(Constants.TEMPERATURE)
+
+            val lowTemp = when (temperatureUnit) {
+                Constants.KELVIN -> String.format("%.1f°K", dayGroup.minOf { it.main.temp_min })
+                Constants.FAHRENHEIT -> String.format("%.1f°F", (dayGroup.minOf { it.main.temp_min } - 273.15) * 9 / 5 + 32)
+                else -> String.format("%.1f°C", dayGroup.minOf { it.main.temp_min } - 273.15)
+            }
+
+            val highTemp = when (temperatureUnit) {
+                Constants.KELVIN -> String.format("%.1f°K", dayGroup.maxOf { it.main.temp_max })
+                Constants.FAHRENHEIT -> String.format("%.1f°F", (dayGroup.maxOf { it.main.temp_max } - 273.15) * 9 / 5 + 32)
+                else -> String.format("%.1f°C", dayGroup.maxOf { it.main.temp_max } - 273.15)
+            }
+
+            dailyList.add(Daily(day, weatherDescription, lowTemp, highTemp, weatherIcon))
+        }
+
+        return dailyList
     }
 
     fun checkConnection(context: Context): Boolean {

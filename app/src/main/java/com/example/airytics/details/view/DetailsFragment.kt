@@ -24,6 +24,7 @@ import com.example.airytics.model.Coordinate
 import com.example.airytics.model.Repo
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.network.ApiState
+import com.example.airytics.network.ForecastState
 import com.example.airytics.network.RemoteDataSource
 import com.example.airytics.sharedpref.SettingSharedPref
 import com.example.airytics.utilities.Constants
@@ -82,34 +83,58 @@ class DetailsFragment : Fragment() {
         binding.rvDays.adapter = dailyRecyclerAdapter
 
 
-        lifecycleScope.launch {
-            detailViewModel.weatherResponseStateFlow.collectLatest {
-                when (it) {
-                    is ApiState.Success -> {
-                        Log.d(TAG, "onViewCreated: ${it.weatherResponse}")
-                        withContext(Dispatchers.Main) {
-                            setDataToViews(it.weatherResponse)
+        lifecycleScope.launch(Dispatchers.IO) {
+            launch(Dispatchers.IO){
+                detailViewModel.weatherResponseForeStateFlow.collect{foreCastStateVar->
+                    when(foreCastStateVar){
+                        is ForecastState.Failure -> {
+                            Toast.makeText(
+                                requireContext(), foreCastStateVar.errorMessage,Toast.LENGTH_SHORT
+                            ).show()
                         }
-                    }
-
-                    is ApiState.Loading -> {
-                        withContext(Dispatchers.Main) {
+                        com.example.airytics.network.ForecastState.Loading -> {
                             binding.loadingLottie.visibility = View.VISIBLE
                         }
+                        is ForecastState.Success -> {
+                            val dailyList = detailViewModel.parseForecastResponse(foreCastStateVar.weatherForecast)
+                            withContext(Dispatchers.Main){
+                                dailyRecyclerAdapter.submitList(dailyList) // Update adapter with daily data
+                                binding.loadingLottie.visibility = View.GONE
+                            }
+
+                        }
                     }
 
-                    else -> {
-                        withContext(Dispatchers.Main) {
-                            binding.loadingLottie.visibility = View.GONE
-                            Toast.makeText(
-                                requireContext(),
-                                (it as ApiState.Failure).errorMessage,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                }
+            }
+            launch{
+                detailViewModel.weatherResponseStateFlow.collect { apiState ->
+                    when (apiState) {
+                        is ApiState.Success -> {
+                            withContext(Dispatchers.Main) {
+                                setDataToViews(apiState.weatherResponse)
+                            }
+
+                        }
+                        is ApiState.Loading -> {
+                            withContext(Dispatchers.Main) {
+                                binding.loadingLottie.visibility = View.VISIBLE
+                            }
+                        }
+                        is ApiState.Failure -> {
+                            withContext(Dispatchers.Main) {
+                                binding.loadingLottie.visibility = View.GONE
+                                Toast.makeText(
+                                    requireContext(),
+                                    apiState.errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 
@@ -136,9 +161,9 @@ class DetailsFragment : Fragment() {
 
             val temperatureUnit = detailViewModel.readStringFromSettingSP(Constants.TEMPERATURE)
             val temperature = when (temperatureUnit) {
-                Constants.KELVIN -> String.format("%.1f°K", weatherResponse.main.temp) // Kelvin is default
-                Constants.FAHRENHEIT -> String.format("%.1f°F", (weatherResponse.main.temp - 273.15) * 9 / 5 + 32) // Convert from Kelvin to Fahrenheit
-                else -> String.format("%.1f°C", weatherResponse.main.temp - 273.15) // Convert from Kelvin to Celsius
+                Constants.KELVIN -> String.format("%.1f", weatherResponse.main.temp) + getString(R.string.k)
+                Constants.FAHRENHEIT -> String.format("%.1f", (weatherResponse.main.temp - 273.15) * 9 / 5 + 32) + getString(R.string.f)
+                else -> String.format("%.1f", weatherResponse.main.temp - 273.15) + getString(R.string.c)
             }
             tvCurrentDegree.text = temperature
 

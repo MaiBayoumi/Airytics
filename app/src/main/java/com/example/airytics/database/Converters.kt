@@ -83,6 +83,29 @@ class Converters {
     fun toWind(windJson: String?): Wind? {
         return windJson?.let { gson.fromJson(it, Wind::class.java) }
     }
+
+    @TypeConverter
+    fun fromForecastItemList(value: List<ForecastItem>?): String? {
+        return Gson().toJson(value)
+    }
+
+    @TypeConverter
+    fun toForecastItemList(value: String?): List<ForecastItem>? {
+        val listType = object : TypeToken<List<ForecastItem>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+    @TypeConverter
+    fun fromForecastCity(value: City): String? {
+        return Gson().toJson(value)
+    }
+
+    @TypeConverter
+    fun toForecastCity(value: String?): City{
+        val listType = object : TypeToken<List<ForecastItem>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+
     // Convert Current
     @TypeConverter
     fun fromCurrentToString(current: Current?): String? {

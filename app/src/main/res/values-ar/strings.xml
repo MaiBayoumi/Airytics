@@ -23,12 +23,12 @@
     <string name="today">اليوم</string>
     <string name="hour">4 PM</string>
     <string name="day">يوم</string>
-    <string name="_23_13_c">23/13°C</string>
+    <string name="_23_13_c">23/13°س</string>
     <string name="favplaces">الأماكن المفضلة</string>
     <string name="gps">موقعك</string>
     <string name="map">الخريطة</string>
     <string name="wind_speed">سرعةالرياح</string>
-    <string name="meter_sec">m/sec</string>
+    <string name="meter_sec">م/س</string>
     <string name="mile_hour">ميل/الساعة</string>
     <string name="language">اللغة</string>
     <string name="english">الإنجليزية</string>
@@ -48,7 +48,7 @@
     <string name="tomo">غدًا</string>
     <string name="k">ك</string>
     <string name="f">ف</string>
-    <string name="c">م</string>
+    <string name="c">س</string>
     <string name="ok">موافق</string>
     <string name="save_location">حفظ</string>
     <string name="hpa">hpa</string>

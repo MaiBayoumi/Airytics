@@ -24,9 +24,13 @@ interface RepoInterface {
 
     suspend fun insertCashedData(weatherResponse: WeatherResponse)
 
+    suspend fun insertCashedDataForecast(weatherForecastResponse: WeatherForecastResponse)
+
     suspend fun deleteCashedData()
 
     fun getCashedData(): Flow<WeatherResponse>?
+
+    //fun getCashedDataForecast(): Flow<WeatherForecastResponse>?
 
     fun writeStringToSettingSP(key: String, value: String)
 

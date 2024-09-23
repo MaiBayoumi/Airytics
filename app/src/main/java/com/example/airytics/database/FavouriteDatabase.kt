@@ -8,9 +8,10 @@ import androidx.room.TypeConverters
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.pojo.AlarmItem
 import com.example.airytics.model.Place
+import com.example.airytics.model.WeatherForecastResponse
 
 
-@Database(entities = [Place::class, WeatherResponse::class, AlarmItem::class], version = 1)
+@Database(entities = [Place::class, WeatherResponse::class,WeatherForecastResponse::class, AlarmItem::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class FavouriteDatabase: RoomDatabase() {
 

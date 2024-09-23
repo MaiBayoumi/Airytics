@@ -51,26 +51,6 @@ class Repo private constructor(
         }
     }
 
-//    @OptIn(FlowPreview::class)
-//    override fun getWeatherByCountryName(
-//        countryName: String,
-//        language: String,
-//        units: String
-//    ): Flow<State<WeatherForLocation>> = flow {
-//        emit(State.Loading)
-//        try {
-//            val response = remoteDataSource.getWeatherByCountryName(countryName,language,units)
-//            if (response.isSuccessful && response.body() != null) {
-//                emit(State.Success(response.body()!!))
-//            } else {
-//                emit(State.Error(response.message().orEmpty()))
-//            }
-//        } catch (e: Exception) {
-//            emit(State.Error(e.message.orEmpty()))
-//        }
-//    }.timeout(10.seconds).catch {
-//        emit(State.Error("Time out"))
-//    }
 
     override fun getWeatherForecast(
         coordinate: Coordinate,
@@ -110,6 +90,10 @@ class Repo private constructor(
         localSource.insertCashedData(weatherResponse)
     }
 
+    override suspend fun insertCashedDataForecast(weatherForecastResponse: WeatherForecastResponse) {
+        localSource.insertCashedDataForcast(weatherForecastResponse)
+    }
+
     override suspend fun deleteCashedData() {
         localSource.deleteCashedData()
     }
@@ -117,6 +101,10 @@ class Repo private constructor(
     override fun getCashedData(): Flow<WeatherResponse>? {
         return localSource.getCashedData()
     }
+
+//    override fun getCashedDataForecast(): Flow<WeatherForecastResponse>? {
+//        return localSource.getCashedDataForecast()
+//    }
 
     override suspend fun insertAlarm(alarmItem: AlarmItem) {
         localSource.insertAlarm(alarmItem)
