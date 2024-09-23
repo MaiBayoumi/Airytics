@@ -92,7 +92,7 @@ class FavouriteFragment : Fragment() {
                 val snackbar = Snackbar.make(binding.root, "Location deleted", Snackbar.LENGTH_LONG)
                 snackbar.setAction("Undo") {
                     favouriteViewModel.insertPlaceToFav(place)
-                    favouriteRecyclerAdapter.notifyItemInserted(position) // Refresh the RecyclerView
+                    favouriteViewModel.getAllFavouritePlaces() // Refresh the list to get the updated data
                 }
 
                 snackbar.show()
