@@ -8,6 +8,7 @@ import com.example.airytics.model.RepoInterface
 import com.example.airytics.model.WeatherForecastResponse
 import com.example.airytics.network.ApiState
 import com.example.airytics.network.ForecastState
+import com.example.airytics.model.Hourly
 import com.example.airytics.utilities.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -88,6 +89,34 @@ class DetailsViewModel(
 
         return dailyList
     }
+
+
+    fun parseHourlyForecastResponse(response: WeatherForecastResponse): List<Hourly> {
+        val hourlyList = mutableListOf<Hourly>()
+
+        for (forecast in response.list) {
+            val dateTime = forecast.dt // Assuming dt is Long
+            //val weatherDescription = forecast.weather[0].description.capitalize()
+            val weatherIcon = forecast.weather[0].icon
+
+            // Get temperature unit preference
+            val temperatureUnit = readStringFromSettingSP(Constants.TEMPERATURE)
+
+            val temp = when (temperatureUnit) {
+                Constants.KELVIN -> forecast.main.temp // Keep as is
+                Constants.FAHRENHEIT -> (forecast.main.temp - 273.15) * 9 / 5 + 32 // Convert to Fahrenheit
+                else -> forecast.main.temp - 273.15 // Convert to Celsius
+            }
+
+
+            // Assuming Hourly class requires pop, wind, and clouds
+            hourlyList.add(Hourly(dateTime, temp, weatherIcon))
+        }
+
+        return hourlyList
+    }
+
+
     fun readStringFromSettingSP(key: String): String{
         return repo.readStringFromSettingSP(key)
     }

@@ -1,8 +1,6 @@
 package com.example.airytics.hostedactivity.viewmodel
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.airytics.model.Coordinate
@@ -13,6 +11,7 @@ import com.example.airytics.model.WeatherForecastResponse
 import com.example.airytics.model.WeatherResponse
 import com.example.airytics.network.ApiState
 import com.example.airytics.network.ForecastState
+import com.example.airytics.model.Hourly
 import com.example.airytics.utilities.Constants
 import com.example.noaa.utilities.PermissionUtility
 import kotlinx.coroutines.Dispatchers
@@ -189,6 +188,34 @@ class SharedViewModel(
 
         return dailyList
     }
+
+    fun parseHourlyForecastResponse(response: WeatherForecastResponse): List<Hourly> {
+        val hourlyList = mutableListOf<Hourly>()
+
+        for (forecast in response.list) {
+            val dateTime = forecast.dt // Assuming dt is Long
+            //val weatherDescription = forecast.weather[0].description.capitalize()
+            val weatherIcon = forecast.weather[0].icon
+
+            // Get temperature unit preference
+            val temperatureUnit = readStringFromSettingSP(Constants.TEMPERATURE)
+
+            val temp = when (temperatureUnit) {
+                Constants.KELVIN -> forecast.main.temp // Keep as is
+                Constants.FAHRENHEIT -> (forecast.main.temp - 273.15) * 9 / 5 + 32 // Convert to Fahrenheit
+                else -> forecast.main.temp - 273.15 // Convert to Celsius
+            }
+
+
+            // Assuming Hourly class requires pop, wind, and clouds
+            hourlyList.add(Hourly(dateTime, temp, weatherIcon))
+        }
+
+        return hourlyList
+    }
+
+
+
 
     fun checkConnection(context: Context): Boolean {
         return PermissionUtility.checkConnection(context)

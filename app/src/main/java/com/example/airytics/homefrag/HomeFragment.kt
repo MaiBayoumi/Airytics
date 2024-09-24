@@ -94,8 +94,11 @@ class HomeFragment : Fragment() {
                             Log.d("HASSAN","${foreCastStateVar.weatherForecast}")
                             val dailyList =
                                 sharedViewModel.parseForecastResponse(foreCastStateVar.weatherForecast)
+                            val hourlyList =
+                                sharedViewModel.parseHourlyForecastResponse(foreCastStateVar.weatherForecast)
                             withContext(Dispatchers.Main) {
                                 dailyRecyclerAdapter.submitList(dailyList)
+                                hourlyRecyclerAdapter.submitList(hourlyList)
                                 binding.loadingLottie.visibility = View.GONE
                             }
                             insertCashedDataForecast(foreCastStateVar.weatherForecast)

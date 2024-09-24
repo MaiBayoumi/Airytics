@@ -97,8 +97,11 @@ class DetailsFragment : Fragment() {
                         }
                         is ForecastState.Success -> {
                             val dailyList = detailViewModel.parseForecastResponse(foreCastStateVar.weatherForecast)
+                            val hourlyList =
+                                detailViewModel.parseHourlyForecastResponse(foreCastStateVar.weatherForecast)
                             withContext(Dispatchers.Main){
-                                dailyRecyclerAdapter.submitList(dailyList) // Update adapter with daily data
+                                dailyRecyclerAdapter.submitList(dailyList)
+                                hourlyRecyclerAdapter.submitList(hourlyList)
                                 binding.loadingLottie.visibility = View.GONE
                             }
 

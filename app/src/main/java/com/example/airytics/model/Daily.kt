@@ -7,4 +7,5 @@ data class Daily(
     val LowTemp: String,
     val  highTemp : String,
     val icon: String
+
 )
