@@ -1,13 +1,19 @@
-import android.content.Context
+import android.app.Application
 import android.location.Geocoder
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.airytics.R
 import com.example.airytics.model.Place
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MapViewModel(private val context: Context) : ViewModel() {
+@OptIn(FlowPreview::class)
+class MapViewModel(application: Application) : ViewModel() {
+
+   // private val context: Context = application.applicationContext
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -16,16 +22,21 @@ class MapViewModel(private val context: Context) : ViewModel() {
     val filteredLocations: StateFlow<List<Place>> = _filteredLocations
 
     private val countries: List<String> by lazy {
-        context.resources.getStringArray(R.array.countries).toList()
+        application.resources.getStringArray(R.array.countries).toList()
+    }
+
+    private val geocoder: Geocoder by lazy {
+        Geocoder(application)
     }
 
     init {
         viewModelScope.launch {
             searchQuery
-                .debounce(200) // Debounce to limit frequent updates
-                .filter { it.isNotEmpty() }
+                .debounce(300) // Limit frequent updates
+                .filter { it.isNotEmpty() } // Ignore empty queries
+                .distinctUntilChanged() // Process only if the query changes
                 .collectLatest { query ->
-                    fetchLocations(query)
+                    fetchLocations(query) // Perform search on each new query
                 }
         }
     }
@@ -36,16 +47,19 @@ class MapViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    private  fun fetchLocations(query: String) {
-        val results = performLocationSearch(query)
-        _filteredLocations.value = results
+    private fun fetchLocations(query: String) {
+        // Offload the location search to a background thread
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = performLocationSearch(query)
+            withContext(Dispatchers.Main) {
+                _filteredLocations.value = results
+            }
+        }
     }
 
-    private  fun performLocationSearch(query: String): List<Place> {
-        val geocoder = Geocoder(context)
+    private fun performLocationSearch(query: String): List<Place> {
         return countries.filter { it.contains(query, ignoreCase = true) }
             .mapNotNull { countryName ->
-                // Safely call getFromLocationName and handle null results
                 val addresses = geocoder.getFromLocationName(countryName, 1) ?: return@mapNotNull null
                 addresses.firstOrNull()?.let {
                     Place(
@@ -56,5 +70,4 @@ class MapViewModel(private val context: Context) : ViewModel() {
                 }
             }
     }
-
 }

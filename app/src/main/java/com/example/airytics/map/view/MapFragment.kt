@@ -5,8 +5,6 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +13,6 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.airytics.R
 import com.example.airytics.database.LocalDataSource
 import com.example.airytics.databinding.FragmentMapBinding
@@ -23,6 +20,7 @@ import com.example.airytics.hostedactivity.view.HostedActivity
 import com.example.airytics.hostedactivity.viewmodel.SharedViewModel
 import com.example.airytics.hostedactivity.viewmodel.SharedViewModelFactory
 import com.example.airytics.location.LocationClient
+import com.example.airytics.map.vewmodel.MapViewModelFactory
 import com.example.airytics.model.Coordinate
 import com.example.airytics.model.Place
 import com.example.airytics.model.Repo
@@ -38,8 +36,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -80,16 +76,17 @@ class MapFragment : Fragment() {
         val factory = SharedViewModelFactory(
             Repo.getInstance(
                 RemoteDataSource, LocationClient.getInstance(
-                    LocationServices.getFusedLocationProviderClient(view.context),
+                    LocationServices.getFusedLocationProviderClient(requireContext()),
                 ),
                 LocalDataSource.getInstance(requireContext()),
                 SettingSharedPref.getInstance(requireContext())
             )
         )
 
-
         sharedViewModel = ViewModelProvider(requireActivity(), factory)[SharedViewModel::class.java]
-        val mapFactory = MapViewModelFactory(requireContext())
+
+        // Pass the application context to the MapViewModelFactory
+        val mapFactory = MapViewModelFactory(requireActivity().application)
         mapViewModel = ViewModelProvider(this, mapFactory)[MapViewModel::class.java]
 
         setupSearchView()
@@ -109,10 +106,50 @@ class MapFragment : Fragment() {
         }
     }
 
-
     private fun showProgressBar() {
         binding.btnSaveLocation.visibility = View.GONE
         binding.prProgressMap.visibility = View.VISIBLE
+    }
+
+    private fun setupSearchView() {
+        val debounceTime = 300L
+        var lastQuery: String? = null
+        val handler = Handler(Looper.getMainLooper())
+
+        binding.etSearch.addTextChangedListener { text ->
+            val query = text.toString()
+            lastQuery = query
+
+            handler.removeCallbacksAndMessages(null)
+            handler.postDelayed({
+                if (query == lastQuery) {
+                    mapViewModel.search(query)
+                }
+            }, debounceTime)
+        }
+
+        lifecycleScope.launch {
+            mapViewModel.filteredLocations.collect { places ->
+                if (places.isNotEmpty()) {
+                    val firstPlace = places.first()
+                    val latLng = LatLng(firstPlace.latitude, firstPlace.longitude)
+                    placeMarkerOnMap(latLng)
+                }
+            }
+        }
+    }
+
+    private fun placeMarkerOnMap(latLng: LatLng) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                coordinate = Coordinate(latLng.latitude, latLng.longitude)
+                marker?.remove()
+                marker = googleMap.addMarker(
+                    MarkerOptions().position(latLng)
+                )
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+            }
+        }
     }
 
     private fun googleMapHandler() {
@@ -132,56 +169,6 @@ class MapFragment : Fragment() {
     }
 
 
-    private fun setupSearchView() {
-        val debounceTime = 300L // Set debounce time in milliseconds
-        var lastQuery: String? = null
-        val handler = Handler(Looper.getMainLooper())
-
-        binding.etSearch.addTextChangedListener { text ->
-            val query = text.toString()
-            lastQuery = query
-
-            // Clear previous callbacks
-            handler.removeCallbacksAndMessages(null)
-
-            // Post a delayed runnable for debouncing
-            handler.postDelayed({
-                if (query == lastQuery) { // Ensure the query hasn't changed
-                    mapViewModel.search(query)
-                }
-            }, debounceTime)
-        }
-
-        // Collect filtered locations
-        lifecycleScope.launch {
-            mapViewModel.filteredLocations.collect { places ->
-                if (places.isNotEmpty()) {
-                    val firstPlace = places.first()
-                    val latLng = LatLng(firstPlace.latitude, firstPlace.longitude)
-                    placeMarkerOnMap(latLng) // Place the marker on the first result
-                }
-            }
-        }
-    }
-
-
-    private fun placeMarkerOnMap(latLng: LatLng) {
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-                coordinate = Coordinate(latLng.latitude, latLng.longitude) // Set the coordinate
-                marker?.remove() // Remove existing marker
-                marker = googleMap.addMarker(
-                    MarkerOptions().position(latLng)
-                )
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-            }
-        }
-    }
-
-
-
-
-
     private fun handleLocationSave(kind: String?) {
         if (kind == Constants.REGULAR) {
             val language = sharedViewModel.readStringFromSettingSP(Constants.LANGUAGE)
@@ -193,7 +180,8 @@ class MapFragment : Fragment() {
         } else {
             var cityName = "Unknown Location"
             try {
-                val addresses = Geocoder(requireContext()).getFromLocation(coordinate!!.lat, coordinate!!.lon, 5)
+                // Use the application context to avoid memory leaks
+                val addresses = Geocoder(requireActivity().application).getFromLocation(coordinate!!.lat, coordinate!!.lon, 5)
                 cityName = addresses?.let {
                     if (it[0].locality != null) {
                         "${it[0].countryName} / ${it[0].locality}"
