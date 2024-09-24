@@ -20,7 +20,8 @@ interface LocalDataSourceInterface {
     suspend fun deleteCashedData()
 
     fun getCashedData(): Flow<WeatherResponse>?
-   fun getCashedDataForecast():Flow<WeatherForecastResponse>?
+
+    fun getCashedDataForecast():Flow<WeatherForecastResponse>?
 
     suspend fun insertAlarm(alarmItem: AlarmItem)
 

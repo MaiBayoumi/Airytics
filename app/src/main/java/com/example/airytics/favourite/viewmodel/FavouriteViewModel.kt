@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.airytics.model.Place
 import com.example.airytics.model.RepoInterface
-import com.example.noaa.utilities.PermissionUtility
+import com.example.airytics.utilities.PermissionUtility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -37,15 +37,12 @@ class DetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             repo.getWeatherResponse(coordinate, language)
                 .catch { exception ->
-                    // Handle the failure case
                     _weatherResponseMutableStateFlow.value = ApiState.Failure(exception.message ?: "Unknown error occurred")
                 }
                 .collectLatest { weatherResponse ->
                     if (weatherResponse.isSuccessful) {
-                        // If the response is successful, update the state with the result
                         _weatherResponseMutableStateFlow.value = ApiState.Success(weatherResponse.body()!!)
                     } else {
-                        // Handle API error response
                         _weatherResponseMutableStateFlow.value = ApiState.Failure(weatherResponse.message())
                     }
                 }
@@ -60,28 +57,30 @@ class DetailsViewModel(
                 }
         }
     }
-     fun parseForecastResponse(response: WeatherForecastResponse): List<Daily> {
+
+
+    fun parseDailyForecastResponse(response: WeatherForecastResponse): List<Daily> {
         val dailyList = mutableListOf<Daily>()
         val dayGroups = response.list.groupBy { forecast -> forecast.dt_txt.substring(0, 10) }.values.take(5)
 
         for (dayGroup in dayGroups) {
             val firstEntry = dayGroup.first()
             val day = firstEntry.dt_txt.substring(0, 10)
-            val weatherDescription = firstEntry.weather[0].description.capitalize() // Should now be in the correct language
+            val weatherDescription = firstEntry.weather[0].description.capitalize()
             val weatherIcon = firstEntry.weather[0].icon
 
             val temperatureUnit = readStringFromSettingSP(Constants.TEMPERATURE)
 
             val lowTemp = when (temperatureUnit) {
-                Constants.KELVIN -> String.format("%.1f°K", dayGroup.minOf { it.main.temp_min })
-                Constants.FAHRENHEIT -> String.format("%.1f°F", (dayGroup.minOf { it.main.temp_min } - 273.15) * 9 / 5 + 32)
-                else -> String.format("%.1f°C", dayGroup.minOf { it.main.temp_min } - 273.15)
+                Constants.KELVIN ->  dayGroup.minOf { it.main.temp_min }
+                Constants.FAHRENHEIT -> ( dayGroup.minOf { it.main.temp_min } - 273.15)* 9 / 5 + 32
+                else -> dayGroup.minOf { it.main.temp_min } - 273.15
             }
 
             val highTemp = when (temperatureUnit) {
-                Constants.KELVIN -> String.format("%.1f°K", dayGroup.maxOf { it.main.temp_max })
-                Constants.FAHRENHEIT -> String.format("%.1f°F", (dayGroup.maxOf { it.main.temp_max } - 273.15) * 9 / 5 + 32)
-                else -> String.format("%.1f°C", dayGroup.maxOf { it.main.temp_max } - 273.15)
+                Constants.KELVIN ->  dayGroup.maxOf { it.main.temp_max }
+                Constants.FAHRENHEIT -> (dayGroup.maxOf { it.main.temp_max } - 273.15) * 9 / 5 + 32
+                else ->  dayGroup.maxOf { it.main.temp_max } - 273.15
             }
 
             dailyList.add(Daily(day, weatherDescription, lowTemp, highTemp, weatherIcon))
@@ -90,26 +89,19 @@ class DetailsViewModel(
         return dailyList
     }
 
-
     fun parseHourlyForecastResponse(response: WeatherForecastResponse): List<Hourly> {
         val hourlyList = mutableListOf<Hourly>()
 
         for (forecast in response.list) {
-            val dateTime = forecast.dt // Assuming dt is Long
-            //val weatherDescription = forecast.weather[0].description.capitalize()
+            val dateTime = forecast.dt
             val weatherIcon = forecast.weather[0].icon
-
-            // Get temperature unit preference
             val temperatureUnit = readStringFromSettingSP(Constants.TEMPERATURE)
-
             val temp = when (temperatureUnit) {
-                Constants.KELVIN -> forecast.main.temp // Keep as is
-                Constants.FAHRENHEIT -> (forecast.main.temp - 273.15) * 9 / 5 + 32 // Convert to Fahrenheit
-                else -> forecast.main.temp - 273.15 // Convert to Celsius
+                Constants.KELVIN -> forecast.main.temp
+                Constants.FAHRENHEIT -> (forecast.main.temp - 273.15) * 9 / 5 + 32
+                else -> forecast.main.temp - 273.15
             }
 
-
-            // Assuming Hourly class requires pop, wind, and clouds
             hourlyList.add(Hourly(dateTime, temp, weatherIcon))
         }
 

@@ -54,14 +54,12 @@ class DailyRecyclerAdapter :
                     getLocalizedWeatherDescription(currentItem.weatherDescription, language)
 
 
-                // Parse temperature correctly based on locale
                 val numberFormat = NumberFormat.getInstance(Locale.getDefault())
-                val lowTemp =
-                    numberFormat.parse(currentItem.LowTemp.replace("°C", ""))?.toDouble() ?: 0.0
-                val highTemp =
-                    numberFormat.parse(currentItem.highTemp.replace("°C", ""))?.toDouble() ?: 0.0
+                val lowTemp =currentItem.LowTemp
 
-                // Handle temperature display based on user settings
+                val highTemp =currentItem.highTemp
+
+
                 val temperatureUnit = sharedPref.readStringFromSettingSP(Constants.TEMPERATURE)
                 tvDegreeDays.text = when (temperatureUnit) {
                     Constants.KELVIN -> String.format(
@@ -82,7 +80,6 @@ class DailyRecyclerAdapter :
                     )
                 }
 
-                // Set weather icon
                 Functions.setIcon(currentItem.icon, ivIconDays)
             }
         }

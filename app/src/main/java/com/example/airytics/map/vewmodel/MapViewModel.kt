@@ -32,11 +32,11 @@ class MapViewModel(application: Application) : ViewModel() {
     init {
         viewModelScope.launch {
             searchQuery
-                .debounce(300) // Limit frequent updates
-                .filter { it.isNotEmpty() } // Ignore empty queries
-                .distinctUntilChanged() // Process only if the query changes
+                .debounce(300)
+                .filter { it.isNotEmpty() }
+                .distinctUntilChanged()
                 .collectLatest { query ->
-                    fetchLocations(query) // Perform search on each new query
+                    fetchLocations(query)
                 }
         }
     }
@@ -48,7 +48,6 @@ class MapViewModel(application: Application) : ViewModel() {
     }
 
     private fun fetchLocations(query: String) {
-        // Offload the location search to a background thread
         viewModelScope.launch(Dispatchers.IO) {
             val results = performLocationSearch(query)
             withContext(Dispatchers.Main) {

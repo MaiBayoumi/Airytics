@@ -101,7 +101,6 @@ class FavouriteFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(binding.rvFavourite)
 
         favouriteRecyclerAdapter = FavouriteRecyclerAdapter {
-            // navigate to details fragment
             if (favouriteViewModel.checkConnection(requireContext())) {
                 val action =
                     FavouriteFragmentDirections.actionFavouriteFragmentToDetailsFragment(it)

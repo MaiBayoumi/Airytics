@@ -31,7 +31,6 @@ class LocationClient private constructor(
 
     override fun getCurrentLocation():Flow<Coordinate> {
         Log.d(TAG, "getCurrentLocation: ")
-       // requestNewLocationData() //--> some times do not update when i called it
         getCurrentLocationTwo()
         return sharedFlow
     }

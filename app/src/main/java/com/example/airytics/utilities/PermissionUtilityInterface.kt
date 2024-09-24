@@ -1,4 +1,4 @@
-package com.example.noaa.utilities
+package com.example.airytics.utilities
 
 import android.content.Context
 

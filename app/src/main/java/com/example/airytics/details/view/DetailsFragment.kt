@@ -96,7 +96,7 @@ class DetailsFragment : Fragment() {
                             binding.loadingLottie.visibility = View.VISIBLE
                         }
                         is ForecastState.Success -> {
-                            val dailyList = detailViewModel.parseForecastResponse(foreCastStateVar.weatherForecast)
+                            val dailyList = detailViewModel.parseDailyForecastResponse(foreCastStateVar.weatherForecast)
                             val hourlyList =
                                 detailViewModel.parseHourlyForecastResponse(foreCastStateVar.weatherForecast)
                             withContext(Dispatchers.Main){
@@ -144,7 +144,6 @@ class DetailsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setDataToViews(weatherResponse: WeatherResponse) {
         makeViewsVisible()
-        Log.d("HASSAN", "current data $weatherResponse")
 
         Functions.setIcon(weatherResponse.weather[0].icon, binding.ivWeather)
 
@@ -176,10 +175,6 @@ class DetailsFragment : Fragment() {
                 else -> String.format("%.1f %s", weatherResponse.wind.speed, getString(R.string.meter_sec))
             }
             tvDynamicWind.text = windSpeed
-
-            // Load hourly and daily weather data if available
-//            hourlyRecyclerAdapter.submitList(weatherResponse.hourly)
-//            dailyRecyclerAdapter.submitList(weatherResponse.daily.filterIndexed { index, _ -> index != 0 }.sortedWith(compareBy { it.dt }))
 
         }
     }

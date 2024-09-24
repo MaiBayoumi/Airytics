@@ -33,7 +33,6 @@ class HourlyRecyclerAdapter :
 
         fun onBind(currentItem: Hourly) {
             binding.apply {
-                // Get user language preference
                 val language = SettingSharedPref.getInstance(tvDateHours.context)
                     .readStringFromSettingSP(Constants.LANGUAGE)
 
@@ -63,7 +62,7 @@ class HourlyRecyclerAdapter :
                             tvDegreeHours.context.getString(R.string.f)
                         )
                     }
-                    else -> { // Default to Celsius
+                    else -> {
                         String.format("%.0f°%s", temp, tvDegreeHours.context.getString(R.string.c))
                     }
                 }

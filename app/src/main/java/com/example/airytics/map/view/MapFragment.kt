@@ -68,11 +68,10 @@ class MapFragment : Fragment() {
         if (resultCode != ConnectionResult.SUCCESS) {
             googleApiAvailability.getErrorDialog(requireActivity(), resultCode, 0)?.show()
         } else {
-            // Initialize your map or perform actions that require Google Play services
             googleMapHandler()
         }
 
-        // Initialize ViewModel
+
         val factory = SharedViewModelFactory(
             Repo.getInstance(
                 RemoteDataSource, LocationClient.getInstance(
@@ -82,16 +81,13 @@ class MapFragment : Fragment() {
                 SettingSharedPref.getInstance(requireContext())
             )
         )
-
         sharedViewModel = ViewModelProvider(requireActivity(), factory)[SharedViewModel::class.java]
 
-        // Pass the application context to the MapViewModelFactory
         val mapFactory = MapViewModelFactory(requireActivity().application)
         mapViewModel = ViewModelProvider(this, mapFactory)[MapViewModel::class.java]
 
         setupSearchView()
 
-        // Save location button handler
         binding.btnSaveLocation.setOnClickListener {
             if (sharedViewModel.checkConnection(requireContext())) {
                 if (coordinate != null) {
