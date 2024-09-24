@@ -55,25 +55,34 @@ object Functions {
     fun formatDayOfWeek(timestamp: Long, context: Context, lang: String): String {
         val sdf = SimpleDateFormat("EEE", Locale(lang))
         val calendar: Calendar = Calendar.getInstance()
-        val currentDay = calendar.get(Calendar.DAY_OF_YEAR)
-        calendar.timeInMillis = timestamp.toLong() * 1000
-        val targetDay = calendar.get(Calendar.DAY_OF_YEAR)
-        return when (targetDay) {
-            currentDay -> context.getString(R.string.today)
-            currentDay + 1 -> context.getString(R.string.tomo)
-            else -> sdf.format(calendar.time).uppercase(Locale.ROOT)
+
+        val currentDayOfYear = calendar.get(Calendar.DAY_OF_YEAR)
+        calendar.timeInMillis = timestamp * 1000
+        val targetDayOfYear = calendar.get(Calendar.DAY_OF_YEAR)
+
+        val dayName = sdf.format(calendar.time).uppercase(Locale.ROOT)
+
+        return when (targetDayOfYear) {
+            currentDayOfYear -> dayName
+            currentDayOfYear + 1 -> dayName
+            else -> dayName
         }
     }
+
+
 
     fun formatDateStamp(timestamp: Long, context: Context, lang: String): String {
         val sdf = SimpleDateFormat("d MMM", Locale(lang))
         val calendar = Calendar.getInstance()
         val currentDay = calendar.get(Calendar.DAY_OF_YEAR)
         calendar.timeInMillis = timestamp * 1000
+
+        val dayName = sdf.format(calendar.time)
+
         val targetDay = calendar.get(Calendar.DAY_OF_YEAR)
         return when (targetDay) {
-            currentDay -> context.getString(R.string.today)
-            currentDay + 1 -> context.getString(R.string.tomo)
+            currentDay -> dayName
+            currentDay + 1 -> dayName
             else -> sdf.format(calendar.time)
         }
     }

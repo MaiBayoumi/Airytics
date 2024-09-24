@@ -1,7 +1,6 @@
 package com.example.airytics.homefrag
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -34,21 +33,17 @@ class HourlyRecyclerAdapter :
 
         fun onBind(currentItem: Hourly) {
             binding.apply {
-                // Format and display the date and time based on the selected language
+                // Get user language preference
                 val language = SettingSharedPref.getInstance(tvDateHours.context)
                     .readStringFromSettingSP(Constants.LANGUAGE)
 
-                tvDateHours.text =
-                    Functions.formatDateStamp(currentItem.dt, tvDateHours.context, language)
+                tvDateHours.text = Functions.formatDayOfWeek(currentItem.dt, tvDateHours.context, language)
+
                 tvTimeHours.text = Functions.formatTimestamp(currentItem.dt, language)
 
-                // Safely parse and display the temperature
                 val temp = currentItem.temp
                 val tempUnit = SettingSharedPref.getInstance(tvDegreeHours.context)
                     .readStringFromSettingSP(Constants.TEMPERATURE)
-
-                // Log for debugging
-                Log.d("HASSAN", "Temp: $temp, Unit: $tempUnit")
 
                 // Display temperature based on unit
                 tvDegreeHours.text = when (tempUnit) {
@@ -60,7 +55,6 @@ class HourlyRecyclerAdapter :
                             tvDegreeHours.context.getString(R.string.k)
                         )
                     }
-
                     Constants.FAHRENHEIT -> {
                         val fahrenheitTemp = temp * 9 / 5 + 32
                         String.format(
@@ -69,22 +63,19 @@ class HourlyRecyclerAdapter :
                             tvDegreeHours.context.getString(R.string.f)
                         )
                     }
-
                     else -> { // Default to Celsius
                         String.format("%.0f°%s", temp, tvDegreeHours.context.getString(R.string.c))
                     }
                 }
 
-                // Set the weather icon based on the API icon code
                 Functions.setIcon(currentItem.icon, ivStatusIconHours)
             }
         }
-
     }
 
     class RecyclerDiffUtil : DiffUtil.ItemCallback<Hourly>() {
         override fun areItemsTheSame(oldItem: Hourly, newItem: Hourly): Boolean {
-            return oldItem.dt == newItem.dt // Assuming dt is a unique identifier for the hourly data
+            return oldItem.dt == newItem.dt
         }
 
         override fun areContentsTheSame(oldItem: Hourly, newItem: Hourly): Boolean {

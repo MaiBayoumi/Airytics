@@ -41,7 +41,8 @@ class DailyRecyclerAdapter :
                 val sharedPref = SettingSharedPref.getInstance(context)
                 val language = sharedPref.readStringFromSettingSP(Constants.LANGUAGE)
 
-                // Handle day format based on language
+
+
                 val dayTimestamp = convertDateStringToTimestamp(currentItem.day)
                 tvDayDays.text = if (language == Constants.ARABIC) {
                     Functions.formatDayOfWeek(dayTimestamp, context, "ar")
@@ -85,6 +86,8 @@ class DailyRecyclerAdapter :
                 Functions.setIcon(currentItem.icon, ivIconDays)
             }
         }
+
+
 
         private fun getLocalizedWeatherDescription(description: String, language: String): String {
             return if (language == Constants.ARABIC) {
