@@ -91,7 +91,6 @@ class HomeFragment : Fragment() {
                         }
 
                         is ForecastState.Success -> {
-                            Log.d("HASSAN","${foreCastStateVar.weatherForecast}")
                             val dailyList =
                                 sharedViewModel.parseDailyForecastResponse(foreCastStateVar.weatherForecast)
                             val hourlyList =

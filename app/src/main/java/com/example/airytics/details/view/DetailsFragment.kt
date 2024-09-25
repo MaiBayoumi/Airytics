@@ -43,10 +43,10 @@ class DetailsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        // Hide the bottom navigation when this fragment is visible
         val homeActivity = requireActivity() as HostedActivity
         homeActivity.binding.bottomNavigation.visibility = View.GONE
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,9 +58,11 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Retrieve the Place object from arguments
         val place = DetailsFragmentArgs.fromBundle(requireArguments()).place
 
-
+        // ViewModel setup
         val factory = DetailsViewModelFactory(
             Repo.getInstance(
                 RemoteDataSource, LocationClient.getInstance(
@@ -71,53 +73,53 @@ class DetailsFragment : Fragment() {
             )
         )
         detailViewModel = ViewModelProvider(this, factory)[DetailsViewModel::class.java]
-        if (detailViewModel.readStringFromSettingSP(Constants.LANGUAGE) == Constants.ARABIC) {
-            detailViewModel.getWeatherData(Coordinate(place.latitude, place.longitude), "ar")
-        } else {
-            detailViewModel.getWeatherData(Coordinate(place.latitude, place.longitude), "en")
-        }
 
+        // Fetch weather data based on the user's language setting
+        val language = if (detailViewModel.readStringFromSettingSP(Constants.LANGUAGE) == Constants.ARABIC) "ar" else "en"
+        detailViewModel.getWeatherData(Coordinate(place.latitude, place.longitude), language)
+
+        // RecyclerView adapters initialization
         hourlyRecyclerAdapter = HourlyRecyclerAdapter()
         binding.rvHours.adapter = hourlyRecyclerAdapter
         dailyRecyclerAdapter = DailyRecyclerAdapter()
         binding.rvDays.adapter = dailyRecyclerAdapter
 
-
+        // Collecting weather forecast state
         lifecycleScope.launch(Dispatchers.IO) {
-            launch(Dispatchers.IO){
-                detailViewModel.weatherResponseForeStateFlow.collect{foreCastStateVar->
-                    when(foreCastStateVar){
+            launch {
+                detailViewModel.weatherResponseForeStateFlow.collect { foreCastStateVar ->
+                    when (foreCastStateVar) {
                         is ForecastState.Failure -> {
-                            Toast.makeText(
-                                requireContext(), foreCastStateVar.errorMessage,Toast.LENGTH_SHORT
-                            ).show()
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(requireContext(), foreCastStateVar.errorMessage, Toast.LENGTH_SHORT).show()
+                            }
                         }
-                        com.example.airytics.network.ForecastState.Loading -> {
-                            binding.loadingLottie.visibility = View.VISIBLE
+                        ForecastState.Loading -> {
+                            withContext(Dispatchers.Main) {
+                                binding.loadingLottie.visibility = View.VISIBLE
+                            }
                         }
                         is ForecastState.Success -> {
                             val dailyList = detailViewModel.parseDailyForecastResponse(foreCastStateVar.weatherForecast)
-                            val hourlyList =
-                                detailViewModel.parseHourlyForecastResponse(foreCastStateVar.weatherForecast)
-                            withContext(Dispatchers.Main){
+                            val hourlyList = detailViewModel.parseHourlyForecastResponse(foreCastStateVar.weatherForecast)
+                            withContext(Dispatchers.Main) {
                                 dailyRecyclerAdapter.submitList(dailyList)
                                 hourlyRecyclerAdapter.submitList(hourlyList)
                                 binding.loadingLottie.visibility = View.GONE
                             }
-
                         }
                     }
-
                 }
             }
-            launch{
+
+            // Collecting weather data state
+            launch {
                 detailViewModel.weatherResponseStateFlow.collect { apiState ->
                     when (apiState) {
                         is ApiState.Success -> {
                             withContext(Dispatchers.Main) {
                                 setDataToViews(apiState.weatherResponse)
                             }
-
                         }
                         is ApiState.Loading -> {
                             withContext(Dispatchers.Main) {
@@ -127,17 +129,12 @@ class DetailsFragment : Fragment() {
                         is ApiState.Failure -> {
                             withContext(Dispatchers.Main) {
                                 binding.loadingLottie.visibility = View.GONE
-                                Toast.makeText(
-                                    requireContext(),
-                                    apiState.errorMessage,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(requireContext(), apiState.errorMessage, Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                 }
             }
-
         }
     }
 
@@ -145,11 +142,11 @@ class DetailsFragment : Fragment() {
     private fun setDataToViews(weatherResponse: WeatherResponse) {
         makeViewsVisible()
 
+        // Setting weather icon
         Functions.setIcon(weatherResponse.weather[0].icon, binding.ivWeather)
 
         binding.apply {
             tvLocationName.text = Functions.setLocationNameByGeoCoder(weatherResponse, requireContext())
-
             tvWeatherStatus.text = weatherResponse.weather[0].description
 
             tvDynamicPressure.text = String.format("%d %s", weatherResponse.main.pressure, getString(R.string.hpa))
@@ -161,21 +158,22 @@ class DetailsFragment : Fragment() {
             tvSunRise.text = Functions.fromUnixToStringTime(weatherResponse.sys.sunrise, language)
             tvSunSet.text = Functions.fromUnixToStringTime(weatherResponse.sys.sunset, language)
 
+            // Setting temperature
             val temperatureUnit = detailViewModel.readStringFromSettingSP(Constants.TEMPERATURE)
             val temperature = when (temperatureUnit) {
-                Constants.KELVIN -> String.format("%.1f", weatherResponse.main.temp) + getString(R.string.k)
-                Constants.FAHRENHEIT -> String.format("%.1f", (weatherResponse.main.temp - 273.15) * 9 / 5 + 32) + getString(R.string.f)
-                else -> String.format("%.1f", weatherResponse.main.temp - 273.15) + getString(R.string.c)
+                Constants.KELVIN -> String.format("%.1f°%s", weatherResponse.main.temp, getString(R.string.k))
+                Constants.FAHRENHEIT -> String.format("%.1f°%s", (weatherResponse.main.temp - 273.15) * 9 / 5 + 32, getString(R.string.f))
+                else -> String.format("%.1f°%s", weatherResponse.main.temp - 273.15, getString(R.string.c))
             }
             tvCurrentDegree.text = temperature
 
+            // Setting wind speed
             val windSpeedUnit = detailViewModel.readStringFromSettingSP(Constants.WIND_SPEED)
             val windSpeed = when (windSpeedUnit) {
                 Constants.MILE_HOUR -> String.format("%.1f %s", weatherResponse.wind.speed * 2.237, getString(R.string.mile_hour))
                 else -> String.format("%.1f %s", weatherResponse.wind.speed, getString(R.string.meter_sec))
             }
             tvDynamicWind.text = windSpeed
-
         }
     }
 
@@ -199,6 +197,7 @@ class DetailsFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // Show the bottom navigation when leaving this fragment
         val homeActivity = requireActivity() as HostedActivity
         homeActivity.binding.bottomNavigation.visibility = View.VISIBLE
     }

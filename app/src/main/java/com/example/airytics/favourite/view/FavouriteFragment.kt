@@ -100,16 +100,16 @@ class FavouriteFragment : Fragment() {
             val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
         itemTouchHelper.attachToRecyclerView(binding.rvFavourite)
 
-        favouriteRecyclerAdapter = FavouriteRecyclerAdapter {
+        favouriteRecyclerAdapter = FavouriteRecyclerAdapter { selectedPlace ->
             if (favouriteViewModel.checkConnection(requireContext())) {
-                val action =
-                    FavouriteFragmentDirections.actionFavouriteFragmentToDetailsFragment(it)
+                val action = FavouriteFragmentDirections.actionFavouriteFragmentToDetailsFragment(selectedPlace)
                 view.findNavController().navigate(action)
             } else {
-                Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
             }
         }
+
+
         binding.rvFavourite.adapter = favouriteRecyclerAdapter
 
         lifecycleScope.launch {

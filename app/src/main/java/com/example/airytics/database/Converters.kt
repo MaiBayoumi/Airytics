@@ -3,7 +3,6 @@ package com.example.airytics.database
 import androidx.room.TypeConverter
 import com.example.airytics.model.*
 import com.example.airytics.model.Current
-import com.example.airytics.pojo.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

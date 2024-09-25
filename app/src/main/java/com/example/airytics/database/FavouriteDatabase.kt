@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.airytics.model.WeatherResponse
-import com.example.airytics.pojo.AlarmItem
+import com.example.airytics.model.AlarmItem
 import com.example.airytics.model.Place
 import com.example.airytics.model.WeatherForecastResponse
 
