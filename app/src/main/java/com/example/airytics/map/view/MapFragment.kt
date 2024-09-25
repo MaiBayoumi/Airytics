@@ -71,7 +71,6 @@ class MapFragment : Fragment() {
             googleMapHandler()
         }
 
-
         val factory = SharedViewModelFactory(
             Repo.getInstance(
                 RemoteDataSource, LocationClient.getInstance(
@@ -81,6 +80,7 @@ class MapFragment : Fragment() {
                 SettingSharedPref.getInstance(requireContext())
             )
         )
+
         sharedViewModel = ViewModelProvider(requireActivity(), factory)[SharedViewModel::class.java]
 
         val mapFactory = MapViewModelFactory(requireActivity().application)
@@ -176,7 +176,6 @@ class MapFragment : Fragment() {
         } else {
             var cityName = "Unknown Location"
             try {
-                // Use the application context to avoid memory leaks
                 val addresses = Geocoder(requireActivity().application).getFromLocation(coordinate!!.lat, coordinate!!.lon, 5)
                 cityName = addresses?.let {
                     if (it[0].locality != null) {

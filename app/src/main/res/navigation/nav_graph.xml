@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/alertFragment"
-        android:name="com.example.airytics.alert.alertFragment"
+        android:name="com.example.airytics.alert.view.AlertFragment"
         android:label="fragment_alert"
         tools:layout="@layout/fragment_alert" />
 

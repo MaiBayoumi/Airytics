@@ -13,8 +13,6 @@ import kotlinx.coroutines.withContext
 @OptIn(FlowPreview::class)
 class MapViewModel(application: Application) : ViewModel() {
 
-   // private val context: Context = application.applicationContext
-
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
