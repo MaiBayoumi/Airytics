@@ -40,7 +40,7 @@
         android:layout_marginBottom="30dp"
         android:backgroundTint="@color/blue"
         android:fontFamily="@font/lato_regular"
-        android:text="@string/save_location"
+        android:text="@string/save"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

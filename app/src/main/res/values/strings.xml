@@ -50,11 +50,13 @@
     <string name="f">F</string>
     <string name="c">C</string>
     <string name="ok">OK</string>
-    <string name="save_location">Save</string>
+    <string name="save">Save</string>
     <string name="hpa">hpa</string>
     <string name="searching">"Search "</string>
+    <string name="stop">Stop</string>
+    <string name="add_alarm">Add Alarm</string>
 
-        <string-array name="countries">
+    <string-array name="countries">
             <item>Afghanistan</item>
             <item>Albania</item>
             <item>Algeria</item>

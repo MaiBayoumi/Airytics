@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/white"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingVertical="10dp">
+
+        <TextView
+            android:id="@+id/title_alert_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_alarm"
+            android:textColor="@color/blue"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:clickable="true"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="@id/title_alert_dialog"
+            app:layout_constraintStart_toStartOf="@id/title_alert_dialog"
+            app:layout_constraintTop_toBottomOf="@id/title_alert_dialog"
+            app:rippleColor="@color/blue"
+            app:strokeWidth="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="27dp"
+                android:paddingVertical="20dp">
+
+                <TextView
+                    android:id="@+id/tv_from_time_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hour"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_from_date_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/day_details"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="@id/tv_from_time_dialog"
+                    app:layout_constraintStart_toStartOf="@id/tv_from_time_dialog"
+                    app:layout_constraintTop_toBottomOf="@id/tv_from_time_dialog" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup_Alert_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/radio_notification"
+            android:orientation="horizontal"
+            android:paddingHorizontal="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_from"
+            android:theme="@style/Widget.App.RadioButton"
+            >
+
+            <RadioButton
+                android:id="@+id/radio_alert"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingEnd="20dp"
+                android:text="@string/alert_title"
+                android:textColor="@color/blue"
+                tools:ignore="RtlSymmetry" />
+
+            <RadioButton
+                android:id="@+id/radio_notification"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/notification"
+                android:textColor="@color/blue" />
+        </RadioGroup>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btn_save_dialog"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/blue"
+            android:clickable="true"
+            android:elevation="3dp"
+            app:cardCornerRadius="30dp"
+            android:layout_marginHorizontal="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radioGroup_Alert_dialog"
+            app:rippleColor="@color/gray"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
+
+
+<!--<TextView-->
+<!--android:id="@+id/tv_From_alert_dialog"-->
+<!--android:layout_width="110dp"-->
+<!--android:layout_height="39dp"-->
+<!--android:layout_marginTop="15dp"-->
+<!--android:gravity="center"-->
+<!--android:text="@string/from"-->
+<!--android:textColor="@color/text_color"-->
+<!--android:textSize="18sp"-->
+<!--android:textStyle="bold"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/title_alert_dialog" />-->
+
+
+<!--<TextView-->
+<!--android:id="@+id/tv_to_alert_dialog"-->
+<!--android:layout_width="110dp"-->
+<!--android:layout_height="38dp"-->
+<!--android:gravity="center"-->
+<!--android:text="@string/to"-->
+<!--android:textColor="@color/text_color"-->
+<!--android:textSize="18sp"-->
+<!--android:textStyle="bold"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintHorizontal_bias="0.5"-->
+<!--app:layout_constraintStart_toEndOf="@+id/tv_From_alert_dialog"-->
+<!--app:layout_constraintTop_toTopOf="@id/tv_From_alert_dialog" />-->
+
+<!--<com.google.android.material.card.MaterialCardView-->
+<!--android:id="@+id/cv_to"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:backgroundTint="@color/baseColor"-->
+<!--android:clickable="true"-->
+<!--app:cardCornerRadius="25dp"-->
+<!--app:cardElevation="3dp"-->
+<!--app:cardUseCompatPadding="true"-->
+<!--app:layout_constraintEnd_toEndOf="@id/tv_to_alert_dialog"-->
+<!--app:layout_constraintStart_toStartOf="@id/tv_to_alert_dialog"-->
+<!--app:layout_constraintTop_toBottomOf="@id/tv_to_alert_dialog"-->
+<!--app:rippleColor="@color/text_color"-->
+<!--app:strokeWidth="0dp">-->
+
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:paddingHorizontal="27dp"-->
+<!--    android:paddingVertical="20dp">-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_to_time_dialog"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/_3_58_am"-->
+<!--        android:textColor="@color/text_color"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_to_date_dialog"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/_15_may_2020"-->
+<!--        android:textColor="@color/text_color"-->
+<!--        android:textSize="11sp"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/tv_to_time_dialog"-->
+<!--        app:layout_constraintStart_toStartOf="@id/tv_to_time_dialog"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_to_time_dialog" />-->
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--</com.google.android.material.card.MaterialCardView>-->

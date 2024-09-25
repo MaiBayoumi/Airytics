@@ -21,4 +21,36 @@
         <item name="colorOnSurface">@color/blue</item>
         <item name="colorPrimary">@color/blue</item>
     </style>
+
+    <!--    customize alert alerts -->
+    <style name="ThemeOverlay.App.DatePicker" parent="@style/ThemeOverlay.Material3.MaterialCalendar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/blue</item>
+        <item name="colorOnSurface">@color/blue</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="buttonBarPositiveButtonStyle">@style/TextButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/TextButton</item>
+    </style>
+
+    <style name="TextButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/blue</item>
+    </style>
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">cut</item>
+    </style>
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">25dp</item>
+    </style>
+
+
+    <style name="ThemeOverlay.App.timePicker" parent="@style/ThemeOverlay.Material3.MaterialTimePicker">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/blue</item>
+        <item name="colorOnSurface">@color/blue</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="buttonBarPositiveButtonStyle">@style/TextButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/TextButton</item>
+    </style>
 </resources>

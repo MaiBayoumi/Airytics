@@ -50,11 +50,14 @@
     <string name="f">ف</string>
     <string name="c">س</string>
     <string name="ok">موافق</string>
-    <string name="save_location">حفظ</string>
+    <string name="save">حفظ</string>
     <string name="hpa">hpa</string>
     <string name="searching">بحث</string>
+    <string name="stop">إيقاف</string>
+    <string name="add_alarm">أضف منبه</string>
 
-        <string-array name="countries">
+
+    <string-array name="countries">
             <item>أفغانستان</item>
             <item>ألبانيا</item>
             <item>الجزائر</item>
