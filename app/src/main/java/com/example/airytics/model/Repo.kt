@@ -44,7 +44,7 @@ class Repo private constructor(
                 val response = remoteSource.getWeatherResponse(coordinate, language)
                 emit(response)
             } catch (e: Exception) {
-                Log.e("error", e.message.toString())
+               // Log.e("error", e.message.toString())
             }
         }
     }
