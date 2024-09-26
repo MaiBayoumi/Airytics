@@ -1,118 +1,105 @@
 package com.example.airytics.model
 
-import com.example.airytics.database.LocalDataSourceInterface
-import com.example.airytics.location.LocationClientInterface
+
 import com.example.airytics.network.ForecastState
-import com.example.airytics.network.RemoteDataSourceInterface
-import com.example.airytics.sharedpref.SettingSPInterface
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import retrofit2.Response
 
 class FakeRepo(
-    private val fakeRemoteSource: RemoteDataSourceInterface,
-    private val fakeLocationClient: LocationClientInterface,
-    private val fakeLocalSource: LocalDataSourceInterface,
-    private val fakeSharedSetting: SettingSPInterface
+    private val places: MutableList<Place> = mutableListOf(),
+    private var weather: WeatherResponse,
+    private var forecaste: WeatherForecastResponse,
+    private var stringReadValue: String,
+    private val alarms: MutableList<AlarmItem> = mutableListOf(), // For storing alarms
+    private var cachedWeatherResponse: WeatherResponse? = null, // For cached weather
+    private var cachedWeatherForecastResponse: WeatherForecastResponse? = null // For cached forecast
 ) : RepoInterface {
+
+    override suspend fun deletePlaceFromFav(place: Place) {
+        places.remove(place)
+    }
+
+    override suspend fun insertPlaceToFav(place: Place) {
+        places.add(place)
+    }
+
+    override fun getAllFavouritePlaces(): Flow<List<Place>> {
+        return flowOf(places)
+    }
 
     override fun getWeatherResponse(
         coordinate: Coordinate,
         language: String
     ): Flow<Response<WeatherResponse>> {
-        return flow {
-            try {
-                // Use fake remote source to return mock weather response
-                val response = fakeRemoteSource.getWeatherResponse(coordinate, language)
-                emit(response)
-            } catch (e: Exception) {
-                // Log or handle the error in your fake repo
-                emit(Response.error(500, null)) // Emit a fake error response for testing
-            }
-        }
+        return flowOf(Response.success(weather))
     }
 
     override fun getWeatherForecast(
         coordinate: Coordinate,
         language: String
     ): Flow<ForecastState> {
-        return flow {
-            try {
-                // Use fake remote source to return mock forecast response
-                val forecastResponse = fakeRemoteSource.getWeatherForecast(coordinate, language)
-                if (forecastResponse.isSuccessful && forecastResponse.body() != null) {
-                    emit(ForecastState.Success(forecastResponse.body()!!))
-                } else {
-                    emit(ForecastState.Failure(forecastResponse.message()))
-                }
-            } catch (e: Exception) {
-                emit(ForecastState.Failure(e.message.toString()))
-            }
-        }
-    }
-
-    override fun getCurrentLocation(): Flow<Coordinate> {
-        // Use fake location client to return mock location
-        return fakeLocationClient.getCurrentLocation()
-    }
-
-    override suspend fun insertPlaceToFav(place: Place) {
-        fakeLocalSource.insertPlaceToFav(place) // Simulate insert to favorite places
-    }
-
-    override suspend fun deletePlaceFromFav(place: Place) {
-        fakeLocalSource.deletePlaceFromFav(place) // Simulate deletion from favorite places
-    }
-
-    override fun getAllFavouritePlaces(): Flow<List<Place>> {
-        return fakeLocalSource.getAllFavouritePlaces() // Simulate fetching all favorite places
-    }
-
-    override suspend fun insertCashedData(weatherResponse: WeatherResponse) {
-        fakeLocalSource.insertCashedData(weatherResponse) // Simulate inserting cached data
-    }
-
-    override suspend fun insertCashedDataForecast(weatherForecastResponse: WeatherForecastResponse) {
-        fakeLocalSource.insertCashedDataForcast(weatherForecastResponse) // Simulate inserting cached forecast data
-    }
-
-    override suspend fun deleteCashedData() {
-        fakeLocalSource.deleteCashedData() // Simulate deletion of cached data
-    }
-
-    override fun getCashedData(): Flow<WeatherResponse>? {
-        return fakeLocalSource.getCashedData() // Simulate fetching cached weather data
-    }
-
-    override fun getCashedDataForecast(): Flow<WeatherForecastResponse>? {
-        return fakeLocalSource.getCashedDataForecast() // Simulate fetching cached forecast data
-    }
-
-    override suspend fun insertAlarm(alarmItem: AlarmItem) {
-        fakeLocalSource.insertAlarm(alarmItem) // Simulate inserting an alarm
-    }
-
-    override suspend fun deleteAlarm(alarmItem: AlarmItem) {
-        fakeLocalSource.deleteAlarm(alarmItem) // Simulate deleting an alarm
-    }
-
-    override fun getAllAlarms(): Flow<List<AlarmItem>> {
-        return fakeLocalSource.getAllAlarms() // Simulate fetching all alarms
-    }
-
-    override fun writeStringToSettingSP(key: String, value: String) {
-        fakeSharedSetting.writeStringToSettingSP(key, value) // Simulate writing to shared preferences
+        return flow { emit(ForecastState.Success(forecaste)) }
     }
 
     override fun readStringFromSettingSP(key: String): String {
-        return fakeSharedSetting.readStringFromSettingSP(key) // Simulate reading from shared preferences
+        return stringReadValue
+    }
+
+    override fun writeStringToSettingSP(key: String, value: String) {
+        stringReadValue = value
+    }
+
+    override fun getCurrentLocation(): Flow<Coordinate> {
+        // Return a dummy location for testing
+        return flow {
+            emit(Coordinate(lat = 0.0, lon = 0.0))
+        }
+    }
+
+    override suspend fun insertCashedData(weatherResponse: WeatherResponse) {
+        cachedWeatherResponse = weatherResponse
+    }
+
+    override suspend fun insertCashedDataForecast(weatherForecastResponse: WeatherForecastResponse) {
+        cachedWeatherForecastResponse = weatherForecastResponse
+    }
+
+    override suspend fun deleteCashedData() {
+        cachedWeatherResponse = null
+    }
+
+    override fun getCashedData(): Flow<WeatherResponse> {
+        return flow {
+            emit(cachedWeatherResponse ?: throw Exception("No cached weather data available"))
+        }
+    }
+
+    override fun getCashedDataForecast(): Flow<WeatherForecastResponse> {
+        return flow {
+            emit(cachedWeatherForecastResponse ?: throw Exception("No cached forecast data available"))
+        }
+    }
+
+    override suspend fun insertAlarm(alarmItem: AlarmItem) {
+        alarms.add(alarmItem)
+    }
+
+    override suspend fun deleteAlarm(alarmItem: AlarmItem) {
+        alarms.remove(alarmItem)
+    }
+
+    override fun getAllAlarms(): Flow<List<AlarmItem>> {
+        return flowOf(alarms)
     }
 
     override fun writeFloatToSettingSP(key: String, value: Float) {
-        fakeSharedSetting.writeFloatToSettingSP(key, value) // Simulate writing float to shared preferences
+
     }
 
     override fun readFloatFromSettingSP(key: String): Float {
-        return fakeSharedSetting.readFloatFromSettingSP(key) // Simulate reading float from shared preferences
+
+        return 0.0f // Placeholder
     }
 }
