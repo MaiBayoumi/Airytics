@@ -25,7 +25,7 @@ class AlarmScheduler private constructor(context: Context) : AlarmSchedulerInter
 
     @SuppressLint("ScheduleExactAlarm")
     override fun createAlarm(item: AlarmItem, context: Context) {
-        val intent = Intent(context, AlarmReciver::class.java).apply {
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra(Constants.ALARM_ITEM, item)
         }
         alarmManager.setExactAndAllowWhileIdle(
@@ -45,7 +45,7 @@ class AlarmScheduler private constructor(context: Context) : AlarmSchedulerInter
             PendingIntent.getBroadcast(
                 context,
                 item.time.toInt(),
-                Intent(context, AlarmReciver::class.java),
+                Intent(context, AlarmReceiver::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )

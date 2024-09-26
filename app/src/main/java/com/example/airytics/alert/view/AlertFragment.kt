@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,8 +26,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airytics.R
-import com.example.airytics.alert.notification.NotificationChannelHelper
-import com.example.airytics.alert.service.AlarmReciver
+import com.example.airytics.alert.service.AlarmReceiver
 import com.example.airytics.alert.service.AlarmScheduler
 import com.example.airytics.alert.viewmodel.AlertViewModel
 import com.example.airytics.alert.viewmodel.AlertViewModelFactory
@@ -96,7 +94,7 @@ class AlertFragment : Fragment() {
 
         alertViewModel = ViewModelProvider(this, factory)[AlertViewModel::class.java]
 
-        alertViewModel.getCashedData()
+        //alertViewModel.getCashedData()
         alertViewModel.getAllAlarms()
 
         alertRecyclerAdapter = AlertRecyclerAdapter()
@@ -202,6 +200,44 @@ class AlertFragment : Fragment() {
         dialog.show()
     }
 
+    private fun setUpTheAlarm(alert: AlarmItem) {
+        try {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                alert.time,
+                getPendingIntent(alert)
+            )
+        } catch (e: SecurityException) {
+            Toast.makeText(
+                requireContext(),
+                "Security Exception ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+    private fun getPendingIntent(alert: AlarmItem): PendingIntent {
+        val intent = if (alert.kind == Constants.NOTIFICATION) {
+            Intent(requireContext(), AlarmReceiver::class.java).apply {
+                action = Constants.ALERT_ACTION_NOTIFICATION
+                putExtra(Constants.ALERT_KEY, alert)
+            }
+        } else {
+            Intent(requireContext(), AlarmReceiver::class.java).apply {
+                action = Constants.ALERT_ACTION_ALARM
+                putExtra(Constants.ALERT_KEY, alert)
+            }
+        }
+
+        return PendingIntent.getBroadcast(
+            requireContext(),
+            alert.time.toInt(),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+    }
+
+
 
     private fun showSettingDialog() {
         MaterialAlertDialogBuilder(
@@ -249,15 +285,17 @@ class AlertFragment : Fragment() {
                 val position = viewHolder.adapterPosition
                 val alarmItem = alertRecyclerAdapter.currentList[position]
 
-                val mediaPlayer = MediaPlayer.create(context, R.raw.delete)
-                mediaPlayer.start()
-                mediaPlayer.setOnCompletionListener { mp ->
-                    mp.release()
-                }
                 alertViewModel.deleteAlarm(alarmItem)
                 alertViewModel.cancelAlarmScheduler(alarmItem, requireContext())
-                Snackbar.make(view, "deleting Alarm.... ", Snackbar.LENGTH_LONG).apply {
+
+                val mediaPlayer = MediaPlayer.create(context, R.raw.delete)
+                mediaPlayer.start()
+                mediaPlayer.setOnCompletionListener { mp -> mp.release() }
+
+
+                Snackbar.make(view, "Alarm deleted", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo") {
+
                         alertViewModel.insertAlarm(alarmItem)
                         alertViewModel.createAlarmScheduler(alarmItem, requireContext())
                     }
@@ -269,6 +307,7 @@ class AlertFragment : Fragment() {
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
         itemTouchHelper.attachToRecyclerView(binding.rvAlerts)
     }
+
 
     private fun showDatePicker() {
         val constraintsBuilder =
@@ -339,45 +378,8 @@ class AlertFragment : Fragment() {
     }
 
 
-    private fun setUpTheAlarm(alert: AlarmItem) {
-        try {
-            alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                alert.time,
-                getPendingIntent(alert)
-            )
-        } catch (e: SecurityException) {
-            Toast.makeText(
-                requireContext(),
-                "Security Exception ${e.message}",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    private fun getPendingIntent(alert: AlarmItem): PendingIntent {
-        Log.d("HASSAN", "Alert: $alert")
-
-        val intent = Intent(requireContext(), AlarmReciver::class.java).apply {
-            action = if (alert.kind == Constants.NOTIFICATION) {
-                Constants.ALERT_ACTION_NOTIFICATION
-            } else {
-                Constants.ALERT_ACTION_ALARM
-            }
-            putExtra(Constants.ALERT_KEY, alert)
-        }
-
-        // Use a unique requestCode based on the time or another identifier
-        val requestCode = alert.time.toInt() // Example based on the time
-        return PendingIntent.getBroadcast(
-            requireContext(),
-            12345,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT // Ensure the Intent is updated
-        )
 
 
-    }
 
 
 }
