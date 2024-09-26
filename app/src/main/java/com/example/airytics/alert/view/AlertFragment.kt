@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -202,15 +203,16 @@ class AlertFragment : Fragment() {
 
     private fun setUpTheAlarm(alert: AlarmItem) {
         try {
+            Log.d("Kerolos", "setUpTheAlarm: called this time ")
             alarmManager.setExact(
                 AlarmManager.RTC_WAKEUP,
                 alert.time,
                 getPendingIntent(alert)
             )
-        } catch (e: SecurityException) {
+        } catch (e: Exception) {
             Toast.makeText(
                 requireContext(),
-                "Security Exception ${e.message}",
+                "Exception ${e.message}",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -232,7 +234,7 @@ class AlertFragment : Fragment() {
             requireContext(),
             alert.time.toInt(),
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
 
     }

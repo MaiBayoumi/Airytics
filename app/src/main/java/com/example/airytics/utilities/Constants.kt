@@ -13,7 +13,7 @@ object Constants {
     const val LOCATION = "location"
     const val WIND_SPEED = "windSpeed"
     const val LANGUAGE = "language"
-    const val NOTIFICATION = "notification"
+    const val NOTIFICATION = "Notification"
     const val TEMPERATURE = "temperature"
 
     const val GPS = "gps"
@@ -43,7 +43,7 @@ object Constants {
     const val ALERT_DESCRIPTION = "alertDescription"
 
     const val ALERT_ACTION_ALARM = "com.example.airytics.ALERT_ACTION_ALARM"
-    const val CHANNEL_ID = 1001 // Example ID
+    const val CHANNEL_ID = 1001
     const val CHANNEL_NAME = "Airytics Alerts"
     const val CHANNEL_DESCRIPTION = "Weather and air quality alerts"
     const val ALERT_KEY = "ALARM_ITEM"
@@ -52,5 +52,5 @@ object Constants {
     const val SETTINGS_SHARED_PREFERENCE_NAME = "airytics_settings"
 
 
-    const val ALERT = "alert"
+    const val ALERT = "ِِAlert"
 }

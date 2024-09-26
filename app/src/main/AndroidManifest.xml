@@ -43,14 +43,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".alert.service.AlarmReceiver"
-
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.airytics.ALERT_ACTION_NOTIFICATION"/>
-                <action android:name="com.example.airytics.ALERT_ACTION_ALARM"/>
-            </intent-filter>
-        </receiver>
+        <receiver android:name=".alert.service.AlarmReceiver"/>
 
 
     </application>
