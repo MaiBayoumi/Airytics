@@ -71,21 +71,21 @@ object Functions {
 
 
 
-    fun formatDateStamp(timestamp: Long, context: Context, lang: String): String {
-        val sdf = SimpleDateFormat("d MMM", Locale(lang))
-        val calendar = Calendar.getInstance()
-        val currentDay = calendar.get(Calendar.DAY_OF_YEAR)
-        calendar.timeInMillis = timestamp * 1000
-
-        val dayName = sdf.format(calendar.time)
-
-        val targetDay = calendar.get(Calendar.DAY_OF_YEAR)
-        return when (targetDay) {
-            currentDay -> dayName
-            currentDay + 1 -> dayName
-            else -> sdf.format(calendar.time)
-        }
-    }
+//    fun formatDateStamp(timestamp: Long, context: Context, lang: String): String {
+//        val sdf = SimpleDateFormat("d MMM", Locale(lang))
+//        val calendar = Calendar.getInstance()
+//        val currentDay = calendar.get(Calendar.DAY_OF_YEAR)
+//        calendar.timeInMillis = timestamp * 1000
+//
+//        val dayName = sdf.format(calendar.time)
+//
+//        val targetDay = calendar.get(Calendar.DAY_OF_YEAR)
+//        return when (targetDay) {
+//            currentDay -> dayName
+//            currentDay + 1 -> dayName
+//            else -> sdf.format(calendar.time)
+//        }
+//    }
 
     fun formatTimestamp(timestamp: Long, lang: String): String {
         val sdf = SimpleDateFormat("h a", Locale(lang))

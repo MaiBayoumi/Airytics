@@ -1,4 +1,4 @@
-package com.example.airytics.pojo
+package com.example.airytics.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -6,10 +6,10 @@ import java.io.Serializable
 
 @Entity(tableName = "alarm_item")
 data class AlarmItem(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val time: Long,
-    val kind: String,
-    val latitude: Double,
-    val longitude: Double,
-    val zoneName: String = ""
+    val kind: String
+//    val latitude: Double,
+//    val longitude: Double,
+//    val zoneName: String = ""
 ): Serializable

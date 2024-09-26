@@ -1,0 +1,53 @@
+package com.example.airytics.alert.service
+
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import com.example.airytics.model.AlarmItem
+import com.example.airytics.utilities.Constants
+
+
+class AlarmScheduler private constructor(context: Context) : AlarmSchedulerInterface {
+    private val alarmManager: AlarmManager by lazy {
+        context.getSystemService(AlarmManager::class.java)
+    }
+
+    companion object {
+        private var instance: AlarmScheduler? = null
+
+        fun getInstance(context: Context): AlarmScheduler =
+            instance ?: synchronized(this) {
+                instance ?: AlarmScheduler(context).also { instance = it }
+            }
+    }
+
+    @SuppressLint("ScheduleExactAlarm")
+    override fun createAlarm(item: AlarmItem, context: Context) {
+        val intent = Intent(context, AlarmReciver::class.java).apply {
+            putExtra(Constants.ALARM_ITEM, item)
+        }
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            item.time,
+            PendingIntent.getBroadcast(
+                context,
+                item.time.toInt(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        )
+    }
+
+    override fun cancelAlarm(item: AlarmItem, context: Context) {
+        alarmManager.cancel(
+            PendingIntent.getBroadcast(
+                context,
+                item.time.toInt(),
+                Intent(context, AlarmReciver::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        )
+    }
+}

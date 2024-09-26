@@ -36,12 +36,20 @@ object Constants {
     const val REGULAR = "regular"
     const val FAVOURITE = "fav"
 
-    const val CHANNEL_NAME= "weather"
-    const val CHANNEL_DESCRIPTION = "weather notification"
-    const val CHANNEL_ID = "123"
+
+
     const val NOTIFICATION_ID = 1
     const val ALARM_ITEM = "alarmItem"
     const val ALERT_DESCRIPTION = "alertDescription"
+
+    const val ALERT_ACTION_ALARM = "com.example.airytics.ALERT_ACTION_ALARM"
+    const val CHANNEL_ID = 1001 // Example ID
+    const val CHANNEL_NAME = "Airytics Alerts"
+    const val CHANNEL_DESCRIPTION = "Weather and air quality alerts"
+    const val ALERT_KEY = "ALARM_ITEM"
+    const val ALERT_ACTION_NOTIFICATION = "com.example.airytics.ALERT_ACTION_NOTIFICATION"
+    const val NOTIFICATION_KEY = "notifications_enabled"
+    const val SETTINGS_SHARED_PREFERENCE_NAME = "airytics_settings"
 
 
     const val ALERT = "alert"

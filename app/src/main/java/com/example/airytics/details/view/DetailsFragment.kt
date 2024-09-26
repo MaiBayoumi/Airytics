@@ -43,7 +43,6 @@ class DetailsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        // Hide the bottom navigation when this fragment is visible
         val homeActivity = requireActivity() as HostedActivity
         homeActivity.binding.bottomNavigation.visibility = View.GONE
     }
