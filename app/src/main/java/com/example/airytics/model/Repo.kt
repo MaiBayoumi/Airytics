@@ -3,10 +3,8 @@ package com.example.airytics.model
 import android.util.Log
 import com.example.airytics.database.LocalDataSourceInterface
 import com.example.airytics.location.LocationClientInterface
-import com.example.airytics.network.ApiState
 import com.example.airytics.network.ForecastState
 import com.example.airytics.network.RemoteDataSourceInterface
-import com.example.airytics.pojo.AlarmItem
 import com.example.airytics.sharedpref.SettingSPInterface
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

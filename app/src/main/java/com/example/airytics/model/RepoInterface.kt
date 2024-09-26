@@ -1,7 +1,6 @@
 package com.example.airytics.model
 
 import com.example.airytics.network.ForecastState
-import com.example.airytics.pojo.AlarmItem
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
