@@ -12,6 +12,7 @@ constraintlayout = "2.1.4"
 navigationFragmentKtx = "2.8.0"
 navigationUiKtx = "2.8.0"
 osmdroidAndroid = "6.1.10"
+coreKtxVersion = "1.6.1"
 
 
 [libraries]
@@ -27,6 +28,7 @@ androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navi
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 
 osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "osmdroidAndroid" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 
 
 [plugins]
