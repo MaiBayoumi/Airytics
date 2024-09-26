@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -97,6 +98,11 @@ dependencies {
     testImplementation ("app.cash.turbine:turbine:1.0.0")
     testImplementation ("org.robolectric:robolectric:4.8")
     testImplementation ("org.mockito:mockito-core:3.12.4")
+
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
+
+    // For coroutines testing
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
 
 
 
