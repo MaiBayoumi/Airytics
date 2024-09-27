@@ -120,38 +120,6 @@ class RepoTest {
 
 
     @Test
-    fun `test getWeatherForecast returns valid forecast state`() = runTest {
-
-    }
-
-    @Test
-    fun `test getWeatherResponse handles error`() = runTest {
-
-    }
-
-
-    @Test
-    fun `test getWeatherForecast handles error`() = runTest {
-//        // Override the fakeRemoteSource to return a failed response
-//        fakeRemoteSource = FakeRemoteDataSource(null, weatherForecastResponse) {
-//            Response.error(404, null)
-//        }
-//        repo = Repo.getInstance(
-//            fakeRemoteSource,
-//            fakeLocationClient,
-//            fakeLocalSource,
-//            fakeSettingSharedPref
-//        )
-//
-//        val flow = repo.getWeatherForecast(coordinate, "en")
-//
-//        flow.take(1).collect { state ->
-//            assertTrue(state is ForecastState.Failure)
-//            assertEquals("404 Not Found", state.message) // Adjust based on your error message handling
-//        }
-    }
-
-    @Test
     fun getCurrentLocationTest() = runTest{
         //when
         val result = repo.getCurrentLocation()
