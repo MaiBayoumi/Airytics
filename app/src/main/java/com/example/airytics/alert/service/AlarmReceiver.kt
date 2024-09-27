@@ -15,9 +15,16 @@ import com.example.airytics.utilities.Constants
 import androidx.core.app.NotificationCompat
 import com.example.airytics.model.AlarmItem
 import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.airytics.alert.viewmodel.AlertViewModel
+import com.example.airytics.database.LocalDataSource
 import com.example.airytics.hostedactivity.view.TAG
+import com.example.airytics.location.LocationClient
+import com.example.airytics.model.Repo
+import com.example.airytics.network.RemoteDataSource
+import com.example.airytics.sharedpref.SettingSharedPref
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -63,7 +70,17 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         alert?.let {
+            val repo = Repo.getInstance(
+                RemoteDataSource,
+                LocationClient.getInstance(
+                    LocationServices.getFusedLocationProviderClient(context!!)
+                ),
+                LocalDataSource.getInstance(context),
+                SettingSharedPref.getInstance(context)
+            )
 
+            val viewModel = AlertViewModel(repo)
+            viewModel.deleteAlarm(it)
         }
     }
 
@@ -110,6 +127,4 @@ class AlarmReceiver : BroadcastReceiver() {
         intent.action = Constants.ALERT_ACTION_ALARM
         context?.sendBroadcast(intent)
     }
-
-
 }

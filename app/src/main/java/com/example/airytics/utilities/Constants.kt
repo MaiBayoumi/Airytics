@@ -13,7 +13,7 @@ object Constants {
     const val LOCATION = "location"
     const val WIND_SPEED = "windSpeed"
     const val LANGUAGE = "language"
-    const val NOTIFICATION = "notification"
+    const val NOTIFICATION = "Notification"
     const val TEMPERATURE = "temperature"
 
     const val GPS = "gps"
@@ -52,5 +52,5 @@ object Constants {
     const val SETTINGS_SHARED_PREFERENCE_NAME = "airytics_settings"
 
 
-    const val ALERT = "ِِalert"
+    const val ALERT = "ِِAlert"
 }
