@@ -55,6 +55,7 @@
     <string name="searching">"Search "</string>
     <string name="stop">Stop</string>
     <string name="add_alarm">Add Alarm</string>
+    <string name="check">Let\'s check the weather</string>
 
     <string-array name="countries">
             <item>Afghanistan</item>

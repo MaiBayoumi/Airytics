@@ -55,6 +55,7 @@
     <string name="searching">بحث</string>
     <string name="stop">إيقاف</string>
     <string name="add_alarm">أضف منبه</string>
+    <string name="check">دعونا نتحقق من الطقس</string>
 
 
     <string-array name="countries">
