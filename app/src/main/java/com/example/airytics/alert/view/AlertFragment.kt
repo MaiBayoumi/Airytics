@@ -284,6 +284,7 @@ class AlertFragment : Fragment() {
                 val position = viewHolder.adapterPosition
                 val alarmItem = alertRecyclerAdapter.currentList[position]
 
+                cancelAlarm(alarmItem)
                 alertViewModel.deleteAlarm(alarmItem)
                // alertViewModel.cancelAlarmScheduler(alarmItem, requireContext())
 
@@ -305,6 +306,12 @@ class AlertFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
         itemTouchHelper.attachToRecyclerView(binding.rvAlerts)
+    }
+
+    private fun cancelAlarm(alarmItem: AlarmItem) {
+        // Cancel the alarm using the PendingIntent
+        val pendingIntent = getPendingIntent(alarmItem)
+        alarmManager.cancel(pendingIntent)
     }
 
 
