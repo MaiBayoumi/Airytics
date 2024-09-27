@@ -14,76 +14,96 @@ import com.example.airytics.R
 import com.example.airytics.utilities.Constants
 import androidx.core.app.NotificationCompat
 import com.example.airytics.model.AlarmItem
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import com.example.airytics.alert.viewmodel.AlertViewModel
+import com.example.airytics.hostedactivity.view.TAG
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class AlarmReceiver: BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("HASSAN", "onReceive called at: ${System.currentTimeMillis()}")
+
         val alertAction = intent?.action
         val alert = intent?.getParcelableExtra<AlarmItem>(Constants.ALERT_KEY)
 
-        Log.d("HASSAN", "Received action: $alertAction")
-        Log.d("HASSAN", "Received alert: $alert")
 
-        when(alertAction)
-        {
+        when (alertAction) {
             Constants.ALERT_ACTION_NOTIFICATION -> {
-                val showNotification = context?.getSharedPreferences(Constants.SETTINGS_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)?.getBoolean(Constants.NOTIFICATION_KEY, false)
-                if(showNotification == true)
-                {
+                // Check for Android 13+ notification permissions
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val permission = ContextCompat.checkSelfPermission(
+                        context!!, android.Manifest.permission.POST_NOTIFICATIONS
+                    )
+                    if (permission != PackageManager.PERMISSION_GRANTED) {
+                        Log.d(TAG, "Notification permission not granted.")
+                        return
+                    }
+                }
+
+
+                val sharedPrefs = context?.getSharedPreferences(
+                    Constants.SETTINGS_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE
+                )
+                val showNotification = sharedPrefs?.getBoolean(
+                    Constants.NOTIFICATION_KEY, true
+                ) ?: true
+
+                if (showNotification) {
                     showNotification(context)
+                } else {
+                    Log.d(TAG, "Notification is disabled in preferences.")
                 }
             }
+
             Constants.ALERT_ACTION_ALARM -> {
                 showAlarm(context)
             }
         }
 
         alert?.let {
-//            GlobalScope.launch {
-//                repository.deleteAlert(alert)
-//            }
-        }
 
+        }
     }
 
     @SuppressLint("ServiceCast")
-        private fun createChannel(context: Context?) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val notificationManager =
-                    context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                val notificationChannel = NotificationChannel(
-                    Constants.CHANNEL_NAME,
-                    Constants.CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH
-                )
-                notificationManager.createNotificationChannel(notificationChannel)
-            }
-        }
+    private fun createChannel(context: Context?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-
-        private fun showNotification(context: Context?) {
-            val intent = Intent(context, HostedActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(
-                context,
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
+            val notificationChannel = NotificationChannel(
+                Constants.CHANNEL_NAME,
+                Constants.CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH
             )
-            createChannel(context)
-            val notificationManager =
-                context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            val notification = NotificationCompat.Builder(context, Constants.CHANNEL_NAME)
-                .setContentTitle("Airytics")
-                .setContentText("Let's check the weather")
-                .setSmallIcon(R.drawable.logo)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent)
-                .build()
-
-            notificationManager.notify(Constants.CHANNEL_ID, notification)
-
+            notificationChannel.description =Constants.CHANNEL_DESCRIPTION
+            notificationManager.createNotificationChannel(notificationChannel)
         }
+    }
+
+    private fun showNotification(context: Context?) {
+        val intent = Intent(context, HostedActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        createChannel(context)
+
+        val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val notification = NotificationCompat.Builder(context, Constants.CHANNEL_NAME)
+            .setContentTitle("Airytics")
+            .setContentText("Let's check the weather")
+            .setSmallIcon(R.drawable.logo)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        notificationManager.notify(Constants.CHANNEL_ID, notification)
+    }
 
     private fun showAlarm(context: Context?) {
         val intent = Intent(context, AlarmReceiver::class.java)

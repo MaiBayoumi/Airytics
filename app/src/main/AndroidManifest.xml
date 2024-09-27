@@ -14,6 +14,7 @@
 
 
 
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,9 +30,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAJkttJLErnsRk5ZRu3Usv0blq6OSJOpjU" />
 
-        <activity
-            android:name=".hostedactivity.view.HostedActivity"
-            android:exported="false" />
+        <activity android:name=".hostedactivity.view.HostedActivity" />
+
 
         <activity
             android:name=".MainActivity"

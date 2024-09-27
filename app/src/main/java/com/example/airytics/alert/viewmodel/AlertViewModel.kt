@@ -3,7 +3,6 @@ package com.example.airytics.alert.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.airytics.alert.service.AlarmScheduler
 import com.example.airytics.model.RepoInterface
 import com.example.airytics.network.ApiState
 import com.example.airytics.model.AlarmItem
@@ -14,7 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class AlertViewModel(private val repo: RepoInterface, private val alarmScheduler: AlarmScheduler) :
+class AlertViewModel(private val repo: RepoInterface) :
     ViewModel() {
 
     private val _alarmsMutableStateFlow: MutableStateFlow<List<AlarmItem>> = MutableStateFlow(
@@ -59,13 +58,13 @@ class AlertViewModel(private val repo: RepoInterface, private val alarmScheduler
 //        }
 //    }
 
-    fun createAlarmScheduler(alarmItem: AlarmItem, context: Context) {
-        alarmScheduler.createAlarm(alarmItem, context)
-    }
-
-    fun cancelAlarmScheduler(alarmItem: AlarmItem, context: Context) {
-        alarmScheduler.cancelAlarm(alarmItem, context)
-    }
+//    fun createAlarmScheduler(alarmItem: AlarmItem, context: Context) {
+//        alarmScheduler.createAlarm(alarmItem, context)
+//    }
+//
+//    fun cancelAlarmScheduler(alarmItem: AlarmItem, context: Context) {
+//        alarmScheduler.cancelAlarm(alarmItem, context)
+//    }
 
     fun readStringFromSettingSP(key: String): String {
         return repo.readStringFromSettingSP(key)

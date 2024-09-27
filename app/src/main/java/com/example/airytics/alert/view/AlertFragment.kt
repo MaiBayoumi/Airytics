@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airytics.R
 import com.example.airytics.alert.service.AlarmReceiver
-import com.example.airytics.alert.service.AlarmScheduler
 import com.example.airytics.alert.viewmodel.AlertViewModel
 import com.example.airytics.alert.viewmodel.AlertViewModelFactory
 import com.example.airytics.database.LocalDataSource
@@ -89,8 +88,7 @@ class AlertFragment : Fragment() {
                 ),
                 LocalDataSource.getInstance(requireContext()),
                 SettingSharedPref.getInstance(requireContext())
-            ),
-            AlarmScheduler.getInstance(requireContext())
+            )
         )
 
         alertViewModel = ViewModelProvider(this, factory)[AlertViewModel::class.java]
@@ -183,7 +181,7 @@ class AlertFragment : Fragment() {
             val alarmItem = AlarmItem(time, kind)
             if (time > currentTimeInMillis) {
                 alertViewModel.insertAlarm(alarmItem)
-                alertViewModel.createAlarmScheduler(alarmItem, requireContext())
+                //alertViewModel.createAlarmScheduler(alarmItem, requireContext())
 
 
                 setUpTheAlarm(alarmItem)
@@ -203,7 +201,7 @@ class AlertFragment : Fragment() {
 
     private fun setUpTheAlarm(alert: AlarmItem) {
         try {
-            Log.d("Kerolos", "setUpTheAlarm: called this time ")
+            // Set up alarm with exact trigger time
             alarmManager.setExact(
                 AlarmManager.RTC_WAKEUP,
                 alert.time,
@@ -212,32 +210,31 @@ class AlertFragment : Fragment() {
         } catch (e: Exception) {
             Toast.makeText(
                 requireContext(),
-                "Exception ${e.message}",
+                "Failed to set alarm: ${e.message}",
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
+
     private fun getPendingIntent(alert: AlarmItem): PendingIntent {
-        val intent = if (alert.kind == Constants.NOTIFICATION) {
-            Intent(requireContext(), AlarmReceiver::class.java).apply {
-                action = Constants.ALERT_ACTION_NOTIFICATION
-                putExtra(Constants.ALERT_KEY, alert)
+        val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
+            action = if (alert.kind == Constants.NOTIFICATION) {
+                Constants.ALERT_ACTION_NOTIFICATION
+            } else {
+                Constants.ALERT_ACTION_ALARM
             }
-        } else {
-            Intent(requireContext(), AlarmReceiver::class.java).apply {
-                action = Constants.ALERT_ACTION_ALARM
-                putExtra(Constants.ALERT_KEY, alert)
-            }
+            putExtra(Constants.ALERT_KEY, alert)
         }
 
+        // Use FLAG_UPDATE_CURRENT to update the intent if it already exists
         return PendingIntent.getBroadcast(
             requireContext(),
-            alert.time.toInt(),
+            alert.time.toInt(), // Use a unique request code for each alarm
             intent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
     }
+
 
 
 
@@ -288,7 +285,7 @@ class AlertFragment : Fragment() {
                 val alarmItem = alertRecyclerAdapter.currentList[position]
 
                 alertViewModel.deleteAlarm(alarmItem)
-                alertViewModel.cancelAlarmScheduler(alarmItem, requireContext())
+               // alertViewModel.cancelAlarmScheduler(alarmItem, requireContext())
 
                 val mediaPlayer = MediaPlayer.create(context, R.raw.delete)
                 mediaPlayer.start()
@@ -299,7 +296,7 @@ class AlertFragment : Fragment() {
                     setAction("Undo") {
 
                         alertViewModel.insertAlarm(alarmItem)
-                        alertViewModel.createAlarmScheduler(alarmItem, requireContext())
+                        //alertViewModel.createAlarmScheduler(alarmItem, requireContext())
                     }
                     show()
                 }
