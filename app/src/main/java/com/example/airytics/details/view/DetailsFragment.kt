@@ -58,10 +58,8 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Retrieve the Place object from arguments
         val place = DetailsFragmentArgs.fromBundle(requireArguments()).place
 
-        // ViewModel setup
         val factory = DetailsViewModelFactory(
             Repo.getInstance(
                 RemoteDataSource, LocationClient.getInstance(
@@ -73,11 +71,9 @@ class DetailsFragment : Fragment() {
         )
         detailViewModel = ViewModelProvider(this, factory)[DetailsViewModel::class.java]
 
-        // Fetch weather data based on the user's language setting
         val language = if (detailViewModel.readStringFromSettingSP(Constants.LANGUAGE) == Constants.ARABIC) "ar" else "en"
         detailViewModel.getWeatherData(Coordinate(place.latitude, place.longitude), language)
 
-        // RecyclerView adapters initialization
         hourlyRecyclerAdapter = HourlyRecyclerAdapter()
         binding.rvHours.adapter = hourlyRecyclerAdapter
         dailyRecyclerAdapter = DailyRecyclerAdapter()
@@ -141,7 +137,6 @@ class DetailsFragment : Fragment() {
     private fun setDataToViews(weatherResponse: WeatherResponse) {
         makeViewsVisible()
 
-        // Setting weather icon
         Functions.setIcon(weatherResponse.weather[0].icon, binding.ivWeather)
 
         binding.apply {
@@ -196,7 +191,6 @@ class DetailsFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Show the bottom navigation when leaving this fragment
         val homeActivity = requireActivity() as HostedActivity
         homeActivity.binding.bottomNavigation.visibility = View.VISIBLE
     }

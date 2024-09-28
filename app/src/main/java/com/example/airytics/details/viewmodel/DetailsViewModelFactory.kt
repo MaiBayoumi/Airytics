@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.airytics.model.RepoInterface
 
 
+@Suppress("UNCHECKED_CAST")
 class DetailsViewModelFactory(
     private val repo: RepoInterface
 ): ViewModelProvider.Factory {

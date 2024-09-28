@@ -124,7 +124,7 @@ class DailyRecyclerAdapter :
             return try {
                 val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val date = sdf.parse(dateString)
-                date?.time?.div(1000) ?: 0L // Convert milliseconds to seconds
+                date?.time?.div(1000) ?: 0L
             } catch (e: Exception) {
                 0L
             }

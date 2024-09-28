@@ -128,7 +128,6 @@ class AlarmReceiver : BroadcastReceiver() {
         val notificationManager =
             context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Correct way to retrieve string resource
         val notificationText = context?.getString(R.string.check)
 
         val notification = NotificationCompat.Builder(context, Constants.CHANNEL_NAME)
@@ -139,7 +138,6 @@ class AlarmReceiver : BroadcastReceiver() {
             .setContentIntent(pendingIntent)
             .build()
 
-        // Play notification sound using MediaPlayer
         val mediaPlayer = MediaPlayer.create(context, R.raw.pop_up)
         mediaPlayer?.start()
 
@@ -147,7 +145,6 @@ class AlarmReceiver : BroadcastReceiver() {
             mp.release()
         }
 
-        // Handle possible errors during playback and release resources
         mediaPlayer?.setOnErrorListener { mp, what, extra ->
             mp.release()
             true
@@ -156,28 +153,15 @@ class AlarmReceiver : BroadcastReceiver() {
         notificationManager.notify(Constants.CHANNEL_ID, notification)
     }
 
-    private fun showAlarm(context: Context?) {
-        val intent = Intent(context, AlarmReceiver::class.java)
-        intent.action = Constants.ALERT_ACTION_ALARM
-        context?.sendBroadcast(intent)
-    }
-
     @SuppressLint("InflateParams")
     private fun showAlarmDialog(context: Context) {
         // Inflate custom dialog layout
         val dialogView = LayoutInflater.from(context).inflate(R.layout.alert_dialog_alarm, null)
-//        val dialogMessage = dialogView.findViewById<TextView>(R.id.alert_description)
-        //val zoneNameTV = dialogView.findViewById<TextView>(R.id.zoneName)
         val dialogOkButton = dialogView.findViewById<Button>(R.id.alert_stop)
 
-        // Set dialog text
-//        dialogMessage.text = messageFromApi
-//        zoneNameTV.text = zoneName
-
-        // Create media player for the alarm sound
         val mediaPlayer = MediaPlayer.create(context, R.raw.alert)
 
-        // Build and show the dialog
+
         val builder = AlertDialog.Builder(context, R.style.MyCustomAlertDialogStyle)
         builder.setView(dialogView)
         val dialog = builder.create()
@@ -188,7 +172,7 @@ class AlarmReceiver : BroadcastReceiver() {
             mediaPlayer.isLooping = true
         }
 
-        // Set window type to show the dialog over other apps
+
         val window = dialog.window
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
@@ -216,12 +200,12 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
 
-        // Handle stop button click
+
         dialogOkButton.setOnClickListener {
             dialog.dismiss()
         }
 
-        // Stop the media player when the dialog is dismissed
+
         dialog.setOnDismissListener {
             mediaPlayer.stop()
             mediaPlayer.setOnCompletionListener { mp ->

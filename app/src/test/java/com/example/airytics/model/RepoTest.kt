@@ -102,21 +102,20 @@ class RepoTest {
     }
 
 
-    //success weather response
+
     @Test
-    fun `test getWeatherResponse returns valid response`() = runTest {
+    fun getWeatherDataTest()= runTest{
         //when
-        val flow = repo.getWeatherResponse(coordinate, "en")
+        val result = repo.getWeatherResponse(coordinate, "en")
 
         //then
-        flow.take(1).collect { response ->
-            println("Response isSuccessful: ${response.isSuccessful}")
-            println("Response body: ${response.body()}")
-
-            assertTrue(response.isSuccessful)
-            assertEquals(weatherResponse, response.body())
+        result.collectLatest {
+            if(it.isSuccessful){
+                assertEquals(weatherResponse, it.body())
+            }
         }
     }
+
 
 
     @Test

@@ -20,7 +20,7 @@ import com.example.airytics.hostedactivity.view.HostedActivity
 import com.example.airytics.hostedactivity.viewmodel.SharedViewModel
 import com.example.airytics.hostedactivity.viewmodel.SharedViewModelFactory
 import com.example.airytics.location.LocationClient
-import com.example.airytics.map.vewmodel.MapViewModelFactory
+import com.example.airytics.map.viewmodel.MapViewModelFactory
 import com.example.airytics.model.Coordinate
 import com.example.airytics.model.Place
 import com.example.airytics.model.Repo

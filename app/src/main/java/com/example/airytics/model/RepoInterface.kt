@@ -11,7 +11,10 @@ interface RepoInterface {
          language: String
     ): Flow<Response<WeatherResponse>>
 
-    fun getWeatherForecast(coordinate: Coordinate, language: String): Flow<ForecastState>
+    fun getWeatherForecast(
+        coordinate: Coordinate,
+        language: String
+    ): Flow<ForecastState>
 
     fun getCurrentLocation():Flow<Coordinate>
 

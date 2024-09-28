@@ -111,8 +111,9 @@
             app:layout_constraintEnd_toStartOf="@+id/iv_weather"
             app:layout_constraintHorizontal_bias="0.659"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_weather"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="@+id/iv_weather" />
+            />
 
         <TextView
             android:id="@+id/tv_weather_status"
@@ -135,7 +136,7 @@
             android:id="@+id/sunRise"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="24dp"
             android:elevation="9dp"
             android:scaleType="fitCenter"
@@ -143,13 +144,13 @@
             app:layout_constraintStart_toEndOf="@id/iv_weather"
             app:layout_constraintTop_toTopOf="@id/iv_weather"
             android:visibility="gone"
-
             />
 
         <TextView
             android:id="@+id/tv_sunRise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:text="@string/sunrise"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/sunRise"
@@ -158,14 +159,13 @@
             app:layout_constraintStart_toEndOf="@id/sunRise"
             app:layout_constraintTop_toTopOf="@+id/sunRise"
             android:visibility="gone"
-
             />
 
         <ImageView
             android:id="@+id/sunSet"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:layout_marginBottom="20dp"
             android:elevation="9dp"
             android:scaleType="fitCenter"
@@ -173,14 +173,13 @@
             app:layout_constraintBottom_toBottomOf="@id/iv_weather"
             app:layout_constraintStart_toEndOf="@id/iv_weather"
             android:visibility="gone"
-
-
             />
 
         <TextView
             android:id="@+id/tv_sunSet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:text="@string/sunset"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/sunSet"
@@ -189,13 +188,13 @@
             app:layout_constraintStart_toEndOf="@id/sunSet"
             app:layout_constraintTop_toTopOf="@+id/sunSet"
             android:visibility="gone"
-
             />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/white"
             app:cardCornerRadius="25dp"
             app:cardElevation="10dp"
@@ -206,7 +205,6 @@
             app:layout_constraintTop_toBottomOf="@id/rv_days"
             app:strokeWidth="0dp"
             android:visibility="gone"
-
             >
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -383,6 +381,7 @@
             android:id="@+id/rv_hours"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
@@ -395,6 +394,7 @@
             android:id="@+id/rv_days"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBaseline_toBottomOf="parent"

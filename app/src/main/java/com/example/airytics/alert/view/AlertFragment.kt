@@ -79,7 +79,6 @@ class AlertFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //NotificationChannelHelper.createNotificationChannel(requireContext())
 
         val factory = AlertViewModelFactory(
             Repo.getInstance(
@@ -93,7 +92,6 @@ class AlertFragment : Fragment() {
 
         alertViewModel = ViewModelProvider(this, factory)[AlertViewModel::class.java]
 
-        //alertViewModel.getCashedData()
         alertViewModel.getAllAlarms()
 
         alertRecyclerAdapter = AlertRecyclerAdapter()
@@ -181,7 +179,6 @@ class AlertFragment : Fragment() {
             val alarmItem = AlarmItem(time, kind)
             if (time > currentTimeInMillis) {
                 alertViewModel.insertAlarm(alarmItem)
-                //alertViewModel.createAlarmScheduler(alarmItem, requireContext())
 
 
                 setUpTheAlarm(alarmItem)
@@ -201,7 +198,6 @@ class AlertFragment : Fragment() {
 
     private fun setUpTheAlarm(alert: AlarmItem) {
         try {
-            // Set up alarm with exact trigger time
             alarmManager.setExact(
                 AlarmManager.RTC_WAKEUP,
                 alert.time,
@@ -226,10 +222,9 @@ class AlertFragment : Fragment() {
             putExtra(Constants.ALERT_KEY, alert)
         }
 
-        // Use FLAG_UPDATE_CURRENT to update the intent if it already exists
         return PendingIntent.getBroadcast(
             requireContext(),
-            alert.time.toInt(), // Use a unique request code for each alarm
+            alert.time.toInt(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -286,7 +281,6 @@ class AlertFragment : Fragment() {
 
                 cancelAlarm(alarmItem)
                 alertViewModel.deleteAlarm(alarmItem)
-               // alertViewModel.cancelAlarmScheduler(alarmItem, requireContext())
 
                 val mediaPlayer = MediaPlayer.create(context, R.raw.delete)
                 mediaPlayer.start()
@@ -297,7 +291,6 @@ class AlertFragment : Fragment() {
                     setAction("Undo") {
 
                         alertViewModel.insertAlarm(alarmItem)
-                        //alertViewModel.createAlarmScheduler(alarmItem, requireContext())
                     }
                     show()
                 }
@@ -309,7 +302,6 @@ class AlertFragment : Fragment() {
     }
 
     private fun cancelAlarm(alarmItem: AlarmItem) {
-        // Cancel the alarm using the PendingIntent
         val pendingIntent = getPendingIntent(alarmItem)
         alarmManager.cancel(pendingIntent)
     }

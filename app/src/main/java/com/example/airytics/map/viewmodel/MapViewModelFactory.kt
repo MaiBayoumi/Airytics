@@ -1,4 +1,4 @@
-package com.example.airytics.map.vewmodel
+package com.example.airytics.map.viewmodel
 
 import MapViewModel
 import android.app.Application

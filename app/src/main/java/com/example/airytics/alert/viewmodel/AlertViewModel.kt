@@ -46,25 +46,6 @@ class AlertViewModel(private val repo: RepoInterface) :
         }
     }
 
-//    fun getCashedData() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repo.getCashedData()?.let { data ->
-//                data.collectLatest {
-//                    if (it != null) {
-//                        _weatherResponseMutableStateFlow.value = ApiState.Success(it)
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-//    fun createAlarmScheduler(alarmItem: AlarmItem, context: Context) {
-//        alarmScheduler.createAlarm(alarmItem, context)
-//    }
-//
-//    fun cancelAlarmScheduler(alarmItem: AlarmItem, context: Context) {
-//        alarmScheduler.cancelAlarm(alarmItem, context)
-//    }
 
     fun readStringFromSettingSP(key: String): String {
         return repo.readStringFromSettingSP(key)
