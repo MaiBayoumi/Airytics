@@ -1,7 +1,7 @@
 # Airytics
 Airytics weather Cast App is a feature-rich weather application that provides users with up-to-date weather information and the ability to set alarms or notifications for weather alerts The app supports both English and Arabic languages.
 
-Key Features
+#Key Features
 -Current location detection using GPS or manual map selection
 -Real-Time Weather Information
 -Weather Forecasts
@@ -10,7 +10,7 @@ Key Features
 -User-Friendly Interface
 -Users can choose their preferred temperature unit (Celsius, Kelvin, or Fahrenheit)
 
-Tools 
+#Tools 
 -Architecture: Follows the MVVM pattern 
 -Location Services: Implemented using GPS and google Maps.
 -Kotlin Coroutines: Utilizes Flow and StateFlow
